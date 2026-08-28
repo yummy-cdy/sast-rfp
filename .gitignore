@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+
+# 런타임 시 업로드/압축해제되는 분석 대상 소스 (SEC-007 격리 작업영역) - 버전관리 대상 아님
+uploads/*
+!uploads/.gitkeep

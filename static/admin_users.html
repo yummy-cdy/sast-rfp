@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 관리 - SAST 프로그램</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="nav"></div>
+    <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+        <h1 class="text-2xl font-bold mb-6">사용자 관리</h1>
+
+        <div class="mb-6 p-4 border rounded bg-gray-50 space-y-3">
+            <h2 class="font-bold">신규 계정 생성</h2>
+            <input type="text" id="newUserId" placeholder="계정 ID" class="w-full border rounded px-3 py-2">
+            <input type="password" id="newUserPassword" placeholder="비밀번호 (8자 이상)" class="w-full border rounded px-3 py-2">
+            <select id="newUserRole" class="w-full border rounded px-3 py-2">
+                <option value="USER">일반 사용자</option>
+                <option value="ADMIN">시스템 관리자</option>
+            </select>
+            <button id="createUserBtn" class="bg-blue-600 text-white font-bold px-4 py-2 rounded hover:bg-blue-700">생성</button>
+            <div id="createUserMessage" class="text-sm text-red-600"></div>
+        </div>
+
+        <table class="min-w-full border border-gray-300 text-sm">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="py-2 px-3 border-b text-left">계정 ID</th>
+                    <th class="py-2 px-3 border-b text-left">역할</th>
+                    <th class="py-2 px-3 border-b text-left">활성 상태</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody"></tbody>
+        </table>
+    </div>
+    <script src="/static/common.js"></script>
+    <script src="/static/admin_users.js"></script>
+</body>
+</html>

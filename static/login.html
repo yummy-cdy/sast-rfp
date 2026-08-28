@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - SAST 프로그램</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-sm w-full bg-white p-8 rounded shadow">
+        <h1 class="text-xl font-bold mb-6 text-center">SAST 프로그램 로그인</h1>
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold mb-1">계정 ID</label>
+                <input type="text" id="userId" class="w-full border rounded px-3 py-2" required autofocus>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-1">비밀번호</label>
+                <input type="password" id="password" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">로그인</button>
+        </form>
+        <div id="errorMessage" class="text-sm text-red-600 mt-4 text-center"></div>
+    </div>
+    <script src="/static/common.js"></script>
+    <script src="/static/login.js"></script>
+</body>
+</html>
