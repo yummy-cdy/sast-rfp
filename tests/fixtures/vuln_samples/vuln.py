@@ -57,3 +57,28 @@ def open_redirect():
 
 def ssrf():
     return requests.get(request.args.get("url"))
+
+
+def dangerous_file_upload(uploaded_file):
+    uploaded_file.save(os.path.join(UPLOAD_DIR, uploaded_file.filename))
+
+
+def xquery_injection(name):
+    return session.xquery(f"for $x in doc('db')//user[name='{name}'] return $x")
+
+
+def xpath_injection(name):
+    return tree.xpath("//user[@name='" + name + "']")
+
+
+def ldap_injection(username):
+    return conn.search_s(base_dn, scope, f"(uid={username})")
+
+
+@csrf_exempt
+def csrf_vulnerable_view(request):
+    transfer_funds(request.POST["amount"])
+
+
+def http_response_splitting(response):
+    response.headers["Location"] = request.args.get("next")

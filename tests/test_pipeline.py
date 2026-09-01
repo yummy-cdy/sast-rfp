@@ -41,7 +41,7 @@ def test_full_pipeline_upload_analyze_results(client, admin_token):
         f"/api/projects/{project_id}/analyze", headers=auth_headers(admin_token)
     )
     assert analyze_res.status_code == 200
-    assert analyze_res.json()["findings_count"] == 14
+    assert analyze_res.json()["findings_count"] == 20
 
     executions_res = client.get(
         f"/api/projects/{project_id}/executions", headers=auth_headers(admin_token)
@@ -56,7 +56,7 @@ def test_full_pipeline_upload_analyze_results(client, admin_token):
         f"/api/projects/{project_id}/results", headers=auth_headers(admin_token)
     )
     results = results_res.json()
-    assert len(results) == 14
+    assert len(results) == 20
     assert all(r["target_language"] == "Python" for r in results)
 
 

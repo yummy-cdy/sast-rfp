@@ -11,12 +11,19 @@ FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
 EXPECTED_VULN_CRITERIA = {
     "Python": {
-        "KISA-001", "KISA-002", "KISA-004", "KISA-006", "KISA-011", "KISA-014",
+        "KISA-001", "KISA-002", "KISA-004", "KISA-005", "KISA-006", "KISA-007",
+        "KISA-008", "KISA-009", "KISA-010", "KISA-011", "KISA-012", "KISA-014",
         "KISA-018", "KISA-020", "KISA-021", "KISA-022", "KISA-032", "KISA-037",
         "KISA-042", "KISA-046",
     },
-    "Javascript": {"KISA-001", "KISA-003", "KISA-004", "KISA-014", "KISA-020", "KISA-021", "KISA-032"},
-    "Java": {"KISA-001", "KISA-002", "KISA-004", "KISA-018", "KISA-020", "KISA-021", "KISA-032"},
+    "Javascript": {
+        "KISA-001", "KISA-003", "KISA-004", "KISA-012", "KISA-014", "KISA-020",
+        "KISA-021", "KISA-032",
+    },
+    "Java": {
+        "KISA-001", "KISA-002", "KISA-004", "KISA-005", "KISA-008", "KISA-012",
+        "KISA-013", "KISA-018", "KISA-020", "KISA-021", "KISA-032",
+    },
 }
 
 
@@ -62,5 +69,5 @@ def test_criteria_api_filters_by_implementation_status(client, admin_token, seed
         "/api/criteria?implementation_status=IMPLEMENTED", headers=auth_headers(admin_token)
     )
     body = res.json()
-    assert len(body) == 15
+    assert len(body) == 22
     assert all(item["implementation_status"] == "IMPLEMENTED" for item in body)

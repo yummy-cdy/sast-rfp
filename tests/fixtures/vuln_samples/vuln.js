@@ -25,3 +25,7 @@ function emptyCatch() {
     doWork();
   } catch (e) {}
 }
+
+function httpResponseSplitting(res, req) {
+  res.setHeader("X-Redirect", req.query.next);
+}

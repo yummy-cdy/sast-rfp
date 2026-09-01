@@ -29,3 +29,28 @@ def exception_safe():
 
 def command_safe(args):
     subprocess.run(["ls", args], shell=False)
+
+
+def upload_safe(uploaded_file):
+    import uuid
+    uploaded_file.save(os.path.join(UPLOAD_DIR, str(uuid.uuid4())))
+
+
+def xquery_safe():
+    return session.xquery("for $x in doc('db')//user return $x")
+
+
+def xpath_safe():
+    return tree.xpath("//user[@role='admin']")
+
+
+def ldap_safe():
+    return conn.search_s(base_dn, scope, "(objectClass=person)")
+
+
+def csrf_safe_view(request):
+    transfer_funds(request.POST["amount"])
+
+
+def http_header_safe(response):
+    response.headers["X-Frame-Options"] = "DENY"

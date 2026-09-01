@@ -21,4 +21,23 @@ class Clean {
             log(e);
         }
     }
+
+    void uploadSafe(File dir) {
+        new File(dir, java.util.UUID.randomUUID().toString());
+    }
+
+    void xpathSafe(javax.xml.xpath.XPath xpath, org.w3c.dom.Document doc) throws Exception {
+        xpath.evaluate("//user[@role='admin']", doc);
+    }
+
+    void httpHeaderSafe(javax.servlet.http.HttpServletResponse response) {
+        response.setHeader("X-Frame-Options", "DENY");
+    }
+
+    void integerOverflowSafe(javax.servlet.http.HttpServletRequest request) {
+        int rawSize = Integer.parseInt(request.getParameter("size"));
+        if (rawSize > 0 && rawSize < 1_000_000) {
+            int size = rawSize * 1024;
+        }
+    }
 }

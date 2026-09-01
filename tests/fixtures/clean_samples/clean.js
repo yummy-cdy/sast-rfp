@@ -17,3 +17,7 @@ function catchSafe() {
     console.error(e);
   }
 }
+
+function httpHeaderSafe(res) {
+  res.setHeader("X-Frame-Options", "DENY");
+}
