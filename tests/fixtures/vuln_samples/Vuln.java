@@ -46,4 +46,19 @@ class Vuln {
     void integerOverflow(javax.servlet.http.HttpServletRequest request) {
         int size = Integer.parseInt(request.getParameter("size")) * 1024;
     }
+
+    void improperAuthorization(User user, javax.servlet.http.HttpServletRequest request) {
+        user.setRole(request.getParameter("role"));
+    }
+
+    void unencryptedSensitiveData(User user, javax.servlet.http.HttpServletRequest request) {
+        user.setSsn(request.getParameter("ssn"));
+    }
+
+    void sensitiveCookie(String value) {
+        Cookie cookie = new Cookie("password", value);
+    }
+
+    // password=hunter2
+    void sensitiveInfoInComment() {}
 }

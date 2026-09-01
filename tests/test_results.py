@@ -53,7 +53,7 @@ def test_execution_detail_endpoint(client, admin_token):
     assert res.status_code == 200
     body = res.json()
     assert body["status"] == "COMP"
-    assert body["summary"]["findings_count"] == 20
+    assert body["summary"]["findings_count"] == 28
 
 
 def test_execution_results_endpoint_supports_criteria_filter(client, admin_token):

@@ -13,16 +13,18 @@ EXPECTED_VULN_CRITERIA = {
     "Python": {
         "KISA-001", "KISA-002", "KISA-004", "KISA-005", "KISA-006", "KISA-007",
         "KISA-008", "KISA-009", "KISA-010", "KISA-011", "KISA-012", "KISA-014",
-        "KISA-018", "KISA-020", "KISA-021", "KISA-022", "KISA-032", "KISA-037",
-        "KISA-042", "KISA-046",
+        "KISA-015", "KISA-016", "KISA-017", "KISA-018", "KISA-019", "KISA-020",
+        "KISA-021", "KISA-022", "KISA-023", "KISA-024", "KISA-025", "KISA-026",
+        "KISA-032", "KISA-037", "KISA-042", "KISA-046",
     },
     "Javascript": {
-        "KISA-001", "KISA-003", "KISA-004", "KISA-012", "KISA-014", "KISA-020",
-        "KISA-021", "KISA-032",
+        "KISA-001", "KISA-003", "KISA-004", "KISA-012", "KISA-014", "KISA-016",
+        "KISA-019", "KISA-020", "KISA-021", "KISA-024", "KISA-025", "KISA-032",
     },
     "Java": {
         "KISA-001", "KISA-002", "KISA-004", "KISA-005", "KISA-008", "KISA-012",
-        "KISA-013", "KISA-018", "KISA-020", "KISA-021", "KISA-032",
+        "KISA-013", "KISA-016", "KISA-018", "KISA-019", "KISA-020", "KISA-021",
+        "KISA-024", "KISA-025", "KISA-032",
     },
 }
 
@@ -69,5 +71,5 @@ def test_criteria_api_filters_by_implementation_status(client, admin_token, seed
         "/api/criteria?implementation_status=IMPLEMENTED", headers=auth_headers(admin_token)
     )
     body = res.json()
-    assert len(body) == 22
+    assert len(body) == 30
     assert all(item["implementation_status"] == "IMPLEMENTED" for item in body)

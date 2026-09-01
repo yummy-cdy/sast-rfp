@@ -40,4 +40,19 @@ class Clean {
             int size = rawSize * 1024;
         }
     }
+
+    void authorizationSafe(User user) {
+        user.setRole("user");
+    }
+
+    void sensitiveDataSafe(User user, String encryptedSsn) {
+        user.setSsn(encryptedSsn);
+    }
+
+    void cookieSafe(String sessionId) {
+        Cookie cookie = new Cookie("session_id", sessionId);
+    }
+
+    // this method validates the password
+    void commentSafe() {}
 }

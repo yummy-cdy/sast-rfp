@@ -82,3 +82,38 @@ def csrf_vulnerable_view(request):
 
 def http_response_splitting(response):
     response.headers["Location"] = request.args.get("next")
+
+
+@app.route("/admin/delete")
+def missing_auth_admin_delete():
+    perform_delete()
+
+
+def improper_authorization(user):
+    user.is_admin = request.form.get("is_admin")
+
+
+def public_resource_permission():
+    s3.put_object(Bucket=bucket, Key=key, ACL="public-read")
+
+
+def unencrypted_sensitive_data(user):
+    user.ssn = request.form["ssn"]
+
+
+def weak_password_policy(password):
+    if len(password) < 4:
+        raise ValueError("too short")
+
+
+def sensitive_cookie(response, value):
+    response.set_cookie("password", value, max_age=999999)
+
+
+# password: hunter2
+def sensitive_info_in_comment():
+    pass
+
+
+def hash_without_salt(password):
+    return hashlib.sha256(password.encode())

@@ -21,3 +21,18 @@ function catchSafe() {
 function httpHeaderSafe(res) {
   res.setHeader("X-Frame-Options", "DENY");
 }
+
+function authorizationSafe(user) {
+  user.role = "user";
+}
+
+function sensitiveDataSafe(user, encryptedSsn) {
+  user.ssn = encryptedSsn;
+}
+
+function cookieSafe(res, sessionId) {
+  res.cookie("session_id", sessionId);
+}
+
+// handles password reset flow
+function commentSafe() {}

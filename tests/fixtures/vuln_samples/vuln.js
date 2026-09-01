@@ -29,3 +29,18 @@ function emptyCatch() {
 function httpResponseSplitting(res, req) {
   res.setHeader("X-Redirect", req.query.next);
 }
+
+function improperAuthorization(user, req) {
+  user.role = req.body.role;
+}
+
+function unencryptedSensitiveData(user, req) {
+  user.ssn = req.body.ssn;
+}
+
+function sensitiveCookie(res, value) {
+  res.cookie("password", value, { maxAge: 999999 });
+}
+
+// api_key: sk-12345
+function sensitiveInfoInComment() {}
