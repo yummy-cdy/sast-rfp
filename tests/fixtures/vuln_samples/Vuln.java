@@ -1,6 +1,7 @@
 import java.security.MessageDigest;
 import java.util.Random;
 import java.io.File;
+import java.io.FileInputStream;
 
 class Vuln {
     String password = "hunter2";
@@ -61,4 +62,69 @@ class Vuln {
 
     // password=hunter2
     void sensitiveInfoInComment() {}
+
+    private int[] secretData;
+
+    void infiniteLoop() {
+        while (true) {
+            doWork();
+        }
+    }
+
+    void errorInfoExposure() {
+        try {
+            doWork();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void improperExceptionHandling() {
+        try {
+            doWork();
+        } catch (Exception e) {
+            log(e);
+        }
+    }
+
+    void nullDereference(java.util.Map<String, String> map, String key) {
+        map.get(key).length();
+    }
+
+    void improperResourceRelease(String path) throws Exception {
+        FileInputStream stream = new FileInputStream(path);
+        stream.read();
+    }
+
+    int integerConversionError() {
+        return (int) System.currentTimeMillis();
+    }
+
+    void uncheckedReturnValue(File file) {
+        file.delete();
+    }
+
+    void systemDataExposure(javax.servlet.http.HttpServletResponse response) {
+        response.setHeader("Server", "Tomcat/9.0");
+    }
+
+    public int[] getSecretData() {
+        return secretData;
+    }
+
+    public Vuln(int[] secretData) {
+        this.secretData = secretData;
+    }
+
+    void dnsBasedSecurityDecision(java.net.InetAddress addr) {
+        String host = addr.getHostName();
+    }
+
+    byte[] vulnerableApiUsage(String s) {
+        return s.getBytes();
+    }
+
+    void osCommandApiMisuse() throws Exception {
+        Runtime.getRuntime().exec("ls -la");
+    }
 }

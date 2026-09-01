@@ -117,3 +117,52 @@ def sensitive_info_in_comment():
 
 def hash_without_salt(password):
     return hashlib.sha256(password.encode())
+
+
+def toctou(path):
+    if os.path.exists(path):
+        f = open(path)
+        return f.read()
+
+
+def infinite_loop():
+    while True:
+        do_work()
+
+
+def error_info_exposure():
+    try:
+        do_work()
+    except Exception:
+        return traceback.format_exc()
+
+
+def missing_error_handling(path):
+    f = open(path)
+    return f.read()
+
+
+def improper_exception_handling():
+    try:
+        do_work()
+    except Exception as e:
+        log(e)
+
+
+def improper_resource_release(path):
+    f = open(path)
+    return f.read()
+
+
+def use_after_close(path):
+    f = open(path)
+    f.close()
+    f.read()
+
+
+current_request_user = None
+
+
+def session_data_exposure():
+    global current_request_user
+    current_request_user = request.form["user"]

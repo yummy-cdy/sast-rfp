@@ -90,3 +90,53 @@ def comment_safe():
 
 def hash_with_salt_safe(password, salt):
     return hashlib.sha256((password + salt).encode())
+
+
+def toctou_safe(path):
+    try:
+        with open(path) as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
+
+
+def loop_safe():
+    while True:
+        if should_stop():
+            break
+        do_work()
+
+
+def error_info_safe():
+    try:
+        do_work()
+    except ValueError as exc:
+        logger.error("failed: %s", exc)
+
+
+def error_handling_safe(path):
+    try:
+        with open(path) as f:
+            return f.read()
+    except OSError:
+        return None
+
+
+def resource_release_safe(path):
+    try:
+        with open(path) as f:
+            return f.read()
+    except OSError:
+        return None
+
+
+def use_after_close_safe(path):
+    try:
+        with open(path) as f:
+            f.read()
+    except OSError as exc:
+        logger.error("failed: %s", exc)
+
+
+def session_data_safe(session):
+    session["user"] = request.form["user"]

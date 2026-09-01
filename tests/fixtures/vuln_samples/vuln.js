@@ -44,3 +44,22 @@ function sensitiveCookie(res, value) {
 
 // api_key: sk-12345
 function sensitiveInfoInComment() {}
+
+function infiniteLoop() {
+  while (true) {
+    doWork();
+  }
+}
+
+function missingErrorHandling(raw) {
+  return JSON.parse(raw);
+}
+
+function uninitializedVariable() {
+  let x;
+  console.log(x);
+}
+
+function systemDataExposure(res) {
+  res.setHeader("X-Powered-By", "Express");
+}
