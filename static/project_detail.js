@@ -34,12 +34,12 @@ if (dropzone) {
   dropzone.addEventListener("click", () => fileInput.click());
   dropzone.addEventListener("dragover", (e) => {
     e.preventDefault();
-    dropzone.classList.add("border-blue-500", "bg-blue-50");
+    dropzone.classList.add("is-dragover");
   });
-  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("border-blue-500", "bg-blue-50"));
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("is-dragover"));
   dropzone.addEventListener("drop", (e) => {
     e.preventDefault();
-    dropzone.classList.remove("border-blue-500", "bg-blue-50");
+    dropzone.classList.remove("is-dragover");
     if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
   });
   fileInput.addEventListener("change", () => {
@@ -49,7 +49,7 @@ if (dropzone) {
 
 async function handleUpload(file) {
   if (!file.name.endsWith(".zip")) {
-    alert("ZIP 압축 파일만 허용됩니다.");
+    showToast("ZIP 압축 파일만 허용됩니다.", "error");
     return;
   }
   const formData = new FormData();
@@ -83,7 +83,7 @@ async function loadExecutions() {
   const tbody = document.getElementById("executionTableBody");
 
   if (!res.ok || executions.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-500">분석 이력이 없습니다.</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="7">${emptyStateHtml("분석 이력이 없습니다.")}</td></tr>`;
     return;
   }
 
@@ -91,14 +91,14 @@ async function loadExecutions() {
   tbody.innerHTML = executions
     .map(
       (e) => `
-    <tr class="hover:bg-gray-50">
-      <td class="py-2 px-3 border-b">${e.execution_id}</td>
-      <td class="py-2 px-3 border-b">${statusLabel[e.status] || e.status}</td>
-      <td class="py-2 px-3 border-b">${escapeHtml(e.executed_by || "")}</td>
-      <td class="py-2 px-3 border-b text-gray-500">${e.start_time?.replace("T", " ").slice(0, 19) || "-"}</td>
-      <td class="py-2 px-3 border-b text-gray-500">${e.end_time?.replace("T", " ").slice(0, 19) || "-"}</td>
-      <td class="py-2 px-3 border-b">${e.summary?.findings_count ?? "-"}</td>
-      <td class="py-2 px-3 border-b text-red-600">${escapeHtml(e.error_info || "")}</td>
+    <tr>
+      <td class="sast-mono sast-text-faint">${e.execution_id}</td>
+      <td><span class="${statusBadgeClass(e.status)}">${statusLabel[e.status] || e.status}</span></td>
+      <td>${escapeHtml(e.executed_by || "")}</td>
+      <td class="sast-text-faint">${e.start_time?.replace("T", " ").slice(0, 19) || "-"}</td>
+      <td class="sast-text-faint">${e.end_time?.replace("T", " ").slice(0, 19) || "-"}</td>
+      <td>${e.summary?.findings_count ?? "-"}</td>
+      <td class="text-red-600">${escapeHtml(e.error_info || "")}</td>
     </tr>`
     )
     .join("");
@@ -113,19 +113,19 @@ async function loadResults() {
   const tbody = document.getElementById("resultTableBody");
 
   if (!res.ok || results.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-gray-500">발견된 항목이 없습니다.</td></tr>';
+    tbody.innerHTML = `<tr><td colspan="5">${emptyStateHtml("발견된 항목이 없습니다.", "분석을 실행하거나 필터 조건을 변경해보세요.")}</td></tr>`;
     return;
   }
 
   tbody.innerHTML = results
     .map(
       (r) => `
-    <tr class="hover:bg-gray-50">
-      <td class="py-2 px-3 border-b">${escapeHtml(r.criteria_name)} <span class="text-gray-400">(${r.criteria_id})</span></td>
-      <td class="py-2 px-3 border-b text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${severityBadgeClass(r.severity)}">${r.severity}</span></td>
-      <td class="py-2 px-3 border-b truncate max-w-xs" title="${escapeHtml(r.file_path)}">${escapeHtml(r.file_path.split("\\\\").pop().split("/").pop())}</td>
-      <td class="py-2 px-3 border-b truncate max-w-sm" title="${escapeHtml(r.evidence)}">${escapeHtml(r.evidence)}</td>
-      <td class="py-2 px-3 border-b text-gray-600">${escapeHtml(r.recommendation || "")}</td>
+    <tr>
+      <td>${escapeHtml(r.criteria_name)} <span class="sast-text-faint sast-mono">(${r.criteria_id})</span></td>
+      <td class="text-center"><span class="${severityBadgeClass(r.severity)}">${r.severity}</span></td>
+      <td class="truncate max-w-xs" title="${escapeHtml(r.file_path)}">${escapeHtml(r.file_path.split("\\\\").pop().split("/").pop())}</td>
+      <td class="truncate max-w-sm sast-mono" title="${escapeHtml(r.evidence)}">${escapeHtml(r.evidence)}</td>
+      <td class="sast-text-muted">${escapeHtml(r.recommendation || "")}</td>
     </tr>`
     )
     .join("");

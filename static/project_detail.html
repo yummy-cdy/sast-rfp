@@ -5,51 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로젝트 상세 - SAST 프로그램</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body>
+  <div class="sast-app">
     <div id="nav"></div>
-    <div class="max-w-5xl mx-auto space-y-6 pb-12">
+    <main class="sast-main">
+      <div class="sast-main-inner">
 
-        <div class="bg-white p-6 rounded shadow">
+        <div>
             <a href="/static/projects.html" class="text-sm text-blue-600 hover:underline">&larr; 프로젝트 목록</a>
-            <h1 id="projectTitle" class="text-2xl font-bold mt-2"></h1>
-            <p id="projectMeta" class="text-sm text-gray-500 mt-1"></p>
+            <h1 id="projectTitle" class="sast-page-title mt-2"></h1>
+            <p id="projectMeta" class="sast-page-subtitle"></p>
         </div>
 
-        <div id="adminPanel" class="hidden bg-white p-6 rounded shadow">
-            <h2 class="text-lg font-bold mb-4">소스코드 업로드 및 분석 실행</h2>
-            <div id="dropzone" class="border-4 border-dashed border-gray-300 rounded-lg p-8 text-center text-gray-500 hover:bg-gray-50 hover:border-blue-500 transition cursor-pointer mb-4">
+        <div id="adminPanel" class="hidden sast-card">
+            <h2 class="sast-card-title">소스코드 업로드 및 분석 실행</h2>
+            <div id="dropzone" class="sast-dropzone mb-4">
                 여기에 소스코드 압축 파일(.zip)을 드래그 앤 드롭하거나 클릭하여 업로드하세요.
                 <input type="file" id="fileInput" class="hidden" accept=".zip">
             </div>
-            <button id="analyzeBtn" class="w-full bg-blue-600 text-white font-bold py-3 rounded hover:bg-blue-700 transition mb-2">
+            <button id="analyzeBtn" class="sast-btn sast-btn-primary w-full py-2.5 mb-2">
                 정적 분석 실행
             </button>
             <div id="statusMessage" class="text-sm font-semibold text-blue-600"></div>
         </div>
 
-        <div id="permissionPanel" class="hidden bg-white p-6 rounded shadow">
-            <h2 class="text-lg font-bold mb-4">프로젝트 접근 권한 관리</h2>
+        <div id="permissionPanel" class="hidden sast-card">
+            <h2 class="sast-card-title">프로젝트 접근 권한 관리</h2>
             <div class="flex gap-2 mb-4">
-                <select id="userSelect" class="border rounded px-3 py-2 flex-1"></select>
-                <button id="grantBtn" class="bg-blue-600 text-white font-bold px-4 py-2 rounded hover:bg-blue-700">권한 부여</button>
+                <select id="userSelect" class="sast-select flex-1"></select>
+                <button id="grantBtn" class="sast-btn sast-btn-primary">권한 부여</button>
             </div>
             <ul id="permissionList" class="text-sm space-y-1"></ul>
         </div>
 
-        <div class="bg-white p-6 rounded shadow">
-            <h2 class="text-lg font-bold mb-4">분석 이력</h2>
-            <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300 text-sm">
-                <thead class="bg-gray-200">
+        <div class="sast-card">
+            <h2 class="sast-card-title">분석 이력</h2>
+            <div class="sast-table-wrap">
+            <table class="sast-table">
+                <thead>
                     <tr>
-                        <th class="py-2 px-3 border-b text-left">실행ID</th>
-                        <th class="py-2 px-3 border-b text-left">상태</th>
-                        <th class="py-2 px-3 border-b text-left">실행자</th>
-                        <th class="py-2 px-3 border-b text-left">시작</th>
-                        <th class="py-2 px-3 border-b text-left">종료</th>
-                        <th class="py-2 px-3 border-b text-left">발견건수</th>
-                        <th class="py-2 px-3 border-b text-left">오류정보</th>
+                        <th>실행ID</th>
+                        <th>상태</th>
+                        <th>실행자</th>
+                        <th>시작</th>
+                        <th>종료</th>
+                        <th>발견건수</th>
+                        <th>오류정보</th>
                     </tr>
                 </thead>
                 <tbody id="executionTableBody"></tbody>
@@ -57,33 +60,35 @@
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded shadow">
+        <div class="sast-card">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold">최신 분석 결과</h2>
-                <select id="severityFilter" class="border rounded px-3 py-1 text-sm">
+                <h2 class="sast-card-title mb-0">최신 분석 결과</h2>
+                <select id="severityFilter" class="sast-select sast-select-sm">
                     <option value="">전체 심각도</option>
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
                     <option value="Low">Low</option>
                 </select>
             </div>
-            <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300 text-sm">
-                <thead class="bg-gray-200">
+            <div class="sast-table-wrap">
+            <table class="sast-table">
+                <thead>
                     <tr>
-                        <th class="py-2 px-3 border-b text-left">진단항목</th>
-                        <th class="py-2 px-3 border-b text-center">심각도</th>
-                        <th class="py-2 px-3 border-b text-left">파일</th>
-                        <th class="py-2 px-3 border-b text-left">근거</th>
-                        <th class="py-2 px-3 border-b text-left">조치 권고</th>
+                        <th>진단항목</th>
+                        <th class="text-center">심각도</th>
+                        <th>파일</th>
+                        <th>근거</th>
+                        <th>조치 권고</th>
                     </tr>
                 </thead>
                 <tbody id="resultTableBody"></tbody>
             </table>
             </div>
         </div>
-    </div>
-    <script src="/static/common.js"></script>
-    <script src="/static/project_detail.js"></script>
+      </div>
+    </main>
+  </div>
+  <script src="/static/common.js"></script>
+  <script src="/static/project_detail.js"></script>
 </body>
 </html>

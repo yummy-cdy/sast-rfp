@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인 - SAST 프로그램</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="max-w-sm w-full bg-white p-8 rounded shadow">
-        <h1 class="text-xl font-bold mb-6 text-center">SAST 프로그램 로그인</h1>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="max-w-sm w-full sast-card">
+        <div class="flex flex-col items-center gap-2 mb-6">
+            <div class="text-blue-600">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>
+            </div>
+            <h1 class="text-lg font-bold text-center">SAST 플랫폼 로그인</h1>
+        </div>
         <form id="loginForm" class="space-y-4">
             <div>
-                <label class="block text-sm font-semibold mb-1">계정 ID</label>
-                <input type="text" id="userId" class="w-full border rounded px-3 py-2" required autofocus>
+                <label class="sast-label">계정 ID</label>
+                <input type="text" id="userId" class="sast-input" required autofocus>
             </div>
             <div>
-                <label class="block text-sm font-semibold mb-1">비밀번호</label>
-                <input type="password" id="password" class="w-full border rounded px-3 py-2" required>
+                <label class="sast-label">비밀번호</label>
+                <input type="password" id="password" class="sast-input" required>
             </div>
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700">로그인</button>
+            <button type="submit" class="sast-btn sast-btn-primary w-full py-2.5">로그인</button>
         </form>
         <div id="errorMessage" class="text-sm text-red-600 mt-4 text-center"></div>
     </div>

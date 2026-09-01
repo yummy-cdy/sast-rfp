@@ -2,23 +2,26 @@ requireLogin();
 renderNav("users");
 
 if (!isAdmin()) {
-  document.body.innerHTML = '<p class="p-6 text-red-600">관리자만 접근할 수 있습니다.</p>';
+  document.body.innerHTML =
+    '<div class="min-h-screen flex items-center justify-center"><div class="sast-card text-red-600 text-sm">관리자만 접근할 수 있습니다.</div></div>';
   throw new Error("forbidden");
 }
 
 async function loadUsers() {
   const res = await apiFetch("/api/users");
   const users = await res.json();
-  document.getElementById("userTableBody").innerHTML = users
+  const rows = users
     .map(
       (u) => `
-    <tr class="hover:bg-gray-50">
-      <td class="py-2 px-3 border-b">${escapeHtml(u.user_id)}</td>
-      <td class="py-2 px-3 border-b">${escapeHtml(u.role)}</td>
-      <td class="py-2 px-3 border-b">${u.is_active ? "활성" : "비활성"}</td>
+    <tr>
+      <td class="font-semibold">${escapeHtml(u.user_id)}</td>
+      <td><span class="${roleBadgeClass(u.role)}">${u.role === "ADMIN" ? "시스템 관리자" : "일반 사용자"}</span></td>
+      <td><span class="sast-badge ${u.is_active ? "sast-badge-green" : "sast-badge-slate"}">${u.is_active ? "활성" : "비활성"}</span></td>
     </tr>`
     )
     .join("");
+  document.getElementById("userTableBody").innerHTML =
+    rows || `<tr><td colspan="3">${emptyStateHtml("등록된 사용자가 없습니다.")}</td></tr>`;
 }
 
 document.getElementById("createUserBtn").addEventListener("click", async () => {

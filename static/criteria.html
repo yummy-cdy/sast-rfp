@@ -5,39 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>진단 기준 카탈로그 - SAST 프로그램</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body>
+  <div class="sast-app">
     <div id="nav"></div>
-    <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold">KISA 소프트웨어 개발보안 가이드 진단 기준 카탈로그</h1>
-            <div class="flex gap-2">
-                <select id="categoryFilter" class="border rounded px-3 py-1 text-sm"></select>
-                <select id="statusFilter" class="border rounded px-3 py-1 text-sm">
-                    <option value="">전체 구현상태</option>
-                    <option value="IMPLEMENTED">구현됨</option>
-                    <option value="PLANNED">계획됨</option>
-                </select>
-            </div>
+    <main class="sast-main">
+      <div class="sast-main-inner">
+        <div class="sast-page-header">
+          <div>
+            <h1 class="sast-page-title">진단 기준 카탈로그</h1>
+            <p class="sast-page-subtitle" id="summaryLine">KISA 소프트웨어 개발보안 가이드 49개 보안약점 항목</p>
+          </div>
+          <div class="flex gap-2">
+              <select id="categoryFilter" class="sast-select sast-select-sm"></select>
+              <select id="statusFilter" class="sast-select sast-select-sm">
+                  <option value="">전체 구현상태</option>
+                  <option value="IMPLEMENTED">구현됨</option>
+                  <option value="PLANNED">계획됨</option>
+              </select>
+          </div>
         </div>
-        <p id="summaryLine" class="text-sm text-gray-500 mb-4"></p>
-        <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300 text-sm">
-            <thead class="bg-gray-200">
+        <div class="sast-table-wrap">
+        <table class="sast-table">
+            <thead>
                 <tr>
-                    <th class="py-2 px-3 border-b text-left">항목번호</th>
-                    <th class="py-2 px-3 border-b text-left">식별자</th>
-                    <th class="py-2 px-3 border-b text-left">명칭</th>
-                    <th class="py-2 px-3 border-b text-left">분류</th>
-                    <th class="py-2 px-3 border-b text-center">기본심각도</th>
-                    <th class="py-2 px-3 border-b text-center">구현상태</th>
+                    <th>항목번호</th>
+                    <th>식별자</th>
+                    <th>명칭</th>
+                    <th>분류</th>
+                    <th class="text-center">기본심각도</th>
+                    <th class="text-center">구현상태</th>
                 </tr>
             </thead>
             <tbody id="criteriaTableBody"></tbody>
         </table>
         </div>
-    </div>
-    <script src="/static/common.js"></script>
-    <script src="/static/criteria.js"></script>
+      </div>
+    </main>
+  </div>
+  <script src="/static/common.js"></script>
+  <script src="/static/criteria.js"></script>
 </body>
 </html>

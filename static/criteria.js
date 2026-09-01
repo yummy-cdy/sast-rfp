@@ -22,25 +22,28 @@ async function loadCriteria() {
   const implementedCount = items.filter((i) => i.implementation_status === "IMPLEMENTED").length;
   document.getElementById("summaryLine").textContent = `총 ${items.length}개 항목 중 ${implementedCount}개 구현됨`;
 
-  document.getElementById("criteriaTableBody").innerHTML = items
+  const rows = items
     .map(
       (i) => `
-    <tr class="hover:bg-gray-50">
-      <td class="py-2 px-3 border-b text-gray-500">${escapeHtml(i.item_number)}</td>
-      <td class="py-2 px-3 border-b font-mono text-xs">${escapeHtml(i.criteria_id)}</td>
-      <td class="py-2 px-3 border-b font-semibold">${escapeHtml(i.name)}</td>
-      <td class="py-2 px-3 border-b">${escapeHtml(i.category)}</td>
-      <td class="py-2 px-3 border-b text-center"><span class="px-2 py-0.5 rounded text-xs font-bold ${severityBadgeClass(i.default_severity)}">${i.default_severity}</span></td>
-      <td class="py-2 px-3 border-b text-center">
+    <tr>
+      <td class="sast-text-faint">${escapeHtml(i.item_number)}</td>
+      <td class="sast-mono sast-text-faint">${escapeHtml(i.criteria_id)}</td>
+      <td class="font-semibold">${escapeHtml(i.name)}</td>
+      <td class="sast-text-muted">${escapeHtml(i.category)}</td>
+      <td class="text-center"><span class="${severityBadgeClass(i.default_severity)}">${i.default_severity}</span></td>
+      <td class="text-center">
         ${
           i.implementation_status === "IMPLEMENTED"
-            ? '<span class="text-green-700 font-bold">구현됨</span>'
-            : '<span class="text-gray-400">계획됨</span>'
+            ? '<span class="sast-badge sast-badge-green">구현됨</span>'
+            : '<span class="sast-badge sast-badge-slate">계획됨</span>'
         }
       </td>
     </tr>`
     )
     .join("");
+
+  document.getElementById("criteriaTableBody").innerHTML =
+    rows || `<tr><td colspan="6">${emptyStateHtml("조건에 맞는 진단 기준이 없습니다.")}</td></tr>`;
 }
 
 categoryFilter.addEventListener("change", loadCriteria);

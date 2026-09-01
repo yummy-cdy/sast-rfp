@@ -5,36 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>사용자 관리 - SAST 프로그램</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body>
+  <div class="sast-app">
     <div id="nav"></div>
-    <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-        <h1 class="text-2xl font-bold mb-6">사용자 관리</h1>
+    <main class="sast-main">
+      <div class="sast-main-inner" style="max-width: 760px;">
+        <div class="sast-page-header">
+          <div>
+            <h1 class="sast-page-title">사용자 관리</h1>
+            <p class="sast-page-subtitle">계정 생성 및 역할 관리 (시스템 관리자 전용)</p>
+          </div>
+        </div>
 
-        <div class="mb-6 p-4 border rounded bg-gray-50 space-y-3">
-            <h2 class="font-bold">신규 계정 생성</h2>
-            <input type="text" id="newUserId" placeholder="계정 ID" class="w-full border rounded px-3 py-2">
-            <input type="password" id="newUserPassword" placeholder="비밀번호 (8자 이상)" class="w-full border rounded px-3 py-2">
-            <select id="newUserRole" class="w-full border rounded px-3 py-2">
-                <option value="USER">일반 사용자</option>
-                <option value="ADMIN">시스템 관리자</option>
-            </select>
-            <button id="createUserBtn" class="bg-blue-600 text-white font-bold px-4 py-2 rounded hover:bg-blue-700">생성</button>
+        <div class="sast-card space-y-3">
+            <h2 class="sast-card-title">신규 계정 생성</h2>
+            <div>
+              <label class="sast-label">계정 ID</label>
+              <input type="text" id="newUserId" class="sast-input">
+            </div>
+            <div>
+              <label class="sast-label">비밀번호 (8자 이상)</label>
+              <input type="password" id="newUserPassword" class="sast-input">
+            </div>
+            <div>
+              <label class="sast-label">역할</label>
+              <select id="newUserRole" class="sast-select">
+                  <option value="USER">일반 사용자</option>
+                  <option value="ADMIN">시스템 관리자</option>
+              </select>
+            </div>
+            <div class="pt-1">
+              <button id="createUserBtn" class="sast-btn sast-btn-primary">생성</button>
+            </div>
             <div id="createUserMessage" class="text-sm text-red-600"></div>
         </div>
 
-        <table class="min-w-full border border-gray-300 text-sm">
-            <thead class="bg-gray-200">
+        <div class="sast-table-wrap">
+        <table class="sast-table">
+            <thead>
                 <tr>
-                    <th class="py-2 px-3 border-b text-left">계정 ID</th>
-                    <th class="py-2 px-3 border-b text-left">역할</th>
-                    <th class="py-2 px-3 border-b text-left">활성 상태</th>
+                    <th>계정 ID</th>
+                    <th>역할</th>
+                    <th>활성 상태</th>
                 </tr>
             </thead>
             <tbody id="userTableBody"></tbody>
         </table>
-    </div>
-    <script src="/static/common.js"></script>
-    <script src="/static/admin_users.js"></script>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/static/common.js"></script>
+  <script src="/static/admin_users.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ document.getElementById("createProjectBtn").addEventListener("click", async () =
   const target_language = document.getElementById("targetLanguage").value;
 
   if (!name) {
-    alert("프로젝트명을 입력하세요.");
+    showToast("프로젝트명을 입력하세요.", "error");
     return;
   }
 
@@ -33,7 +33,7 @@ document.getElementById("createProjectBtn").addEventListener("click", async () =
     loadProjects();
   } else {
     const data = await res.json();
-    alert(data.detail || "프로젝트 생성에 실패했습니다.");
+    showToast(data.detail || "프로젝트 생성에 실패했습니다.", "error");
   }
 });
 
@@ -42,20 +42,22 @@ async function loadProjects() {
   const projects = await res.json();
 
   if (projects.length === 0) {
-    tableBody.innerHTML =
-      '<tr><td colspan="5" class="text-center py-6 text-gray-500">조회 가능한 프로젝트가 없습니다.</td></tr>';
+    tableBody.innerHTML = `<tr><td colspan="5">${emptyStateHtml(
+      "조회 가능한 프로젝트가 없습니다.",
+      isAdmin() ? "우측 상단의 '+ 새 프로젝트'로 시작하세요." : "관리자에게 프로젝트 접근 권한을 요청하세요."
+    )}</td></tr>`;
     return;
   }
 
   tableBody.innerHTML = projects
     .map(
       (p) => `
-      <tr class="hover:bg-gray-50 cursor-pointer" onclick="location.href='/static/project_detail.html?id=${p.project_id}'">
-        <td class="py-2 px-4 border-b">${p.project_id}</td>
-        <td class="py-2 px-4 border-b font-semibold text-blue-600">${escapeHtml(p.name)}</td>
-        <td class="py-2 px-4 border-b">${escapeHtml(p.target_language)}</td>
-        <td class="py-2 px-4 border-b text-gray-600">${escapeHtml(p.description || "")}</td>
-        <td class="py-2 px-4 border-b text-gray-500 text-sm">${p.created_at?.slice(0, 10) || ""}</td>
+      <tr class="is-clickable" onclick="location.href='/static/project_detail.html?id=${p.project_id}'">
+        <td class="sast-text-faint sast-mono">${p.project_id}</td>
+        <td class="font-semibold text-blue-600">${escapeHtml(p.name)}</td>
+        <td>${escapeHtml(p.target_language)}</td>
+        <td class="sast-text-muted">${escapeHtml(p.description || "")}</td>
+        <td class="sast-text-faint">${p.created_at?.slice(0, 10) || ""}</td>
       </tr>`
     )
     .join("");
