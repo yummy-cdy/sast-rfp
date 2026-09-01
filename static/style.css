@@ -432,6 +432,98 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ---- Severity stat tiles ---- */
+.sast-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.sast-stat {
+  border: 1px solid var(--sast-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: var(--sast-surface);
+}
+
+.sast-stat-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.sast-stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.sast-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sast-text-muted);
+}
+
+.sast-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--sast-text);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.sast-stat-bar-track {
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.sast-stat-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+/* ---- Category implementation meters ---- */
+.sast-meter-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 56px;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+}
+
+.sast-meter-label {
+  font-size: 12.5px;
+  color: var(--sast-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sast-meter-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #dbeafe;
+  overflow: hidden;
+}
+
+.sast-meter-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--sast-accent);
+}
+
+.sast-meter-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sast-text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
 /* ---- Misc text helpers ---- */
 .sast-text-muted { color: var(--sast-text-muted); }
 .sast-text-faint { color: var(--sast-text-faint); }

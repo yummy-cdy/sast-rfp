@@ -105,14 +105,58 @@ async function loadExecutions() {
 }
 
 // --- 최신 결과 + 필터 (SFR-017) ---
-async function loadResults() {
-  const severity = document.getElementById("severityFilter").value;
-  const qs = severity ? `?severity=${encodeURIComponent(severity)}` : "";
-  const res = await apiFetch(`/api/projects/${projectId}/results${qs}`);
-  const results = await res.json();
-  const tbody = document.getElementById("resultTableBody");
+const SEVERITY_STAT_SPEC = [
+  { key: "High", color: "var(--sast-danger)", track: "#fee2e2" },
+  { key: "Medium", color: "#d97706", track: "#fef3c7" },
+  { key: "Low", color: "#64748b", track: "#e2e8f0" },
+];
 
-  if (!res.ok || results.length === 0) {
+function renderSeveritySummary(results) {
+  const summaryEl = document.getElementById("severitySummary");
+  const total = results.length;
+  if (total === 0) {
+    summaryEl.innerHTML = "";
+    return;
+  }
+  const counts = { High: 0, Medium: 0, Low: 0 };
+  for (const r of results) {
+    if (counts[r.severity] !== undefined) counts[r.severity]++;
+  }
+  summaryEl.innerHTML = SEVERITY_STAT_SPEC.map((spec) => {
+    const count = counts[spec.key];
+    const pct = Math.round((count / total) * 100);
+    return `
+    <div class="sast-stat" title="전체 ${total}건 중 ${spec.key} ${count}건 (${pct}%)">
+      <div class="sast-stat-head">
+        <span class="sast-stat-dot" style="background:${spec.color}"></span>
+        <span class="sast-stat-label">${spec.key}</span>
+      </div>
+      <div class="sast-stat-value">${count}</div>
+      <div class="sast-stat-bar-track" style="background:${spec.track}">
+        <div class="sast-stat-bar-fill" style="width:${pct}%;background:${spec.color}"></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+async function loadResults() {
+  const res = await apiFetch(`/api/projects/${projectId}/results`);
+  const allResults = await res.json();
+  const tbody = document.getElementById("resultTableBody");
+  const summaryEl = document.getElementById("severitySummary");
+
+  if (!res.ok) {
+    tbody.innerHTML = `<tr><td colspan="5">${emptyStateHtml("결과를 불러오지 못했습니다.")}</td></tr>`;
+    summaryEl.innerHTML = "";
+    return;
+  }
+
+  renderSeveritySummary(allResults);
+
+  const severity = document.getElementById("severityFilter").value;
+  const results = severity ? allResults.filter((r) => r.severity === severity) : allResults;
+
+  if (results.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5">${emptyStateHtml("발견된 항목이 없습니다.", "분석을 실행하거나 필터 조건을 변경해보세요.")}</td></tr>`;
     return;
   }
