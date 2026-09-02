@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 
 class Vuln {
     String password = "hunter2";
+    static final int MAX_RETRY = 5;
+    static final int TIMEOUT_SEC = 5;
 
     void sqlInjection(String userInput) throws Exception {
         stmt.executeQuery("SELECT * FROM t WHERE id=" + userInput);

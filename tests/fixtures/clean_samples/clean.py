@@ -140,3 +140,7 @@ def use_after_close_safe(path):
 
 def session_data_safe(session):
     session["user"] = request.form["user"]
+
+
+MAX_LOGIN_ATTEMPTS = 5
+MAX_UPLOAD_RETRIES = 10

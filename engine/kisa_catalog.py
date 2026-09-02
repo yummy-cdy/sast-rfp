@@ -57,7 +57,7 @@ _RAW_ITEMS = [
     ("KISA-036", "초기화되지 않은 변수 사용", _CATEGORY_CODE_ERROR, "5-4", "초기화 없이 변수를 사용하여 예측할 수 없는 동작을 유발하는 결함", "Low", "IMPLEMENTED"),
     ("KISA-037", "신뢰할 수 없는 데이터의 역직렬화", _CATEGORY_CODE_ERROR, "5-5", "검증되지 않은 외부 데이터를 역직렬화하여 임의 코드 실행으로 이어질 수 있는 취약점", "High", "IMPLEMENTED"),
     ("KISA-038", "정수형 변환 오류", _CATEGORY_CODE_ERROR, "5-6", "자료형 변환 과정에서 값 손실 또는 부호 오류가 발생하는 결함", "Low", "IMPLEMENTED"),
-    ("KISA-039", "동일한 상수 사용에 의한 잘못된 값 참조", _CATEGORY_CODE_ERROR, "5-7", "매직 넘버/상수 재사용으로 의도치 않은 값이 참조되는 결함", "Low", "PLANNED"),
+    ("KISA-039", "동일한 상수 사용에 의한 잘못된 값 참조", _CATEGORY_CODE_ERROR, "5-7", "매직 넘버/상수 재사용으로 의도치 않은 값이 참조되는 결함", "Low", "IMPLEMENTED"),
     ("KISA-040", "할당 후 미검사 반환값", _CATEGORY_CODE_ERROR, "5-8", "함수 반환값(오류 코드 등)을 검사하지 않고 사용하는 결함", "Low", "IMPLEMENTED"),
     ("KISA-041", "잘못된 세션에 의한 데이터 정보노출", _CATEGORY_ENCAPSULATION, "6-1", "세션 관리 오류로 인해 다른 사용자의 세션 데이터가 노출되는 취약점", "High", "IMPLEMENTED"),
     ("KISA-042", "제거되지 않고 남은 디버그 코드", _CATEGORY_ENCAPSULATION, "6-2", "운영 환경에 디버그/테스트 목적의 코드나 설정이 그대로 남아있는 취약점", "Medium", "IMPLEMENTED"),

@@ -63,3 +63,6 @@ function uninitializedVariable() {
 function systemDataExposure(res) {
   res.setHeader("X-Powered-By", "Express");
 }
+
+const MAX_RETRY = 5;
+const TIMEOUT_SEC = 5;

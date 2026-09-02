@@ -166,3 +166,7 @@ current_request_user = None
 def session_data_exposure():
     global current_request_user
     current_request_user = request.form["user"]
+
+
+MAX_LOGIN_ATTEMPTS = 5
+MAX_UPLOAD_RETRIES = 5

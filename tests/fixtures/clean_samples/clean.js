@@ -62,3 +62,6 @@ function initializedVariableSafe() {
 function headerSafe(res) {
   res.setHeader("X-Frame-Options", "DENY");
 }
+
+const MAX_RETRY = 5;
+const TIMEOUT_SEC = 10;

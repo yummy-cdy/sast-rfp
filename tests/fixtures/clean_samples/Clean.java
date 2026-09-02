@@ -3,6 +3,9 @@ import java.security.SecureRandom;
 import java.io.FileInputStream;
 
 class Clean {
+    static final int MAX_RETRY = 5;
+    static final int TIMEOUT_SEC = 10;
+
     void sqlSafe(String userInput) throws Exception {
         stmt.executeQuery("SELECT * FROM t WHERE id = ?");
     }
