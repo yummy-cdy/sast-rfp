@@ -13,6 +13,7 @@ def _has_try_ancestor(node) -> bool:
     return False
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class MissingErrorHandlingPythonRule(Rule):
     criteria_id = "KISA-030"
     criteria_name = "오류 상황 대응 부재"
@@ -33,6 +34,7 @@ class MissingErrorHandlingPythonRule(Rule):
         return findings
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class MissingErrorHandlingJsRule(MissingErrorHandlingPythonRule):
     languages = ["Javascript"]
     QUERIES = {
@@ -43,6 +45,7 @@ class MissingErrorHandlingJsRule(MissingErrorHandlingPythonRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class MissingErrorHandlingJavaRule(MissingErrorHandlingPythonRule):
     languages = ["Java"]
     QUERIES = {

@@ -1,6 +1,7 @@
 from engine.base_rule import Rule
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class NullDereferenceJavaRule(Rule):
     """Map.get() 등 null을 반환할 수 있는 호출의 결과를 변수에 저장/검증하지 않고 곧바로 역참조하는 패턴을 탐지한다."""
 

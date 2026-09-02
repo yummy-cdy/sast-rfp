@@ -1,6 +1,7 @@
 from engine.base_rule import Rule
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class DnsBasedSecurityDecisionJavaRule(Rule):
     """역방향 DNS 조회 결과(호스트명)를 보안 판단에 사용할 수 있는 지점을 탐지한다."""
 

@@ -4,6 +4,7 @@ _MESSAGE = "암호학적으로 안전하지 않은 난수 생성기를 사용하
 _RECOMMENDATION = "보안 목적에는 secrets 모듈, java.security.SecureRandom, crypto.randomBytes 등 암호학적으로 안전한 난수 생성기를 사용하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class InsecureRandomPythonRule(Rule):
     criteria_id = "KISA-021"
     criteria_name = "적절하지 않은 난수 값 사용"
@@ -19,6 +20,7 @@ class InsecureRandomPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class InsecureRandomJsRule(Rule):
     criteria_id = "KISA-021"
     criteria_name = "적절하지 않은 난수 값 사용"
@@ -34,6 +36,7 @@ class InsecureRandomJsRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class InsecureRandomJavaRule(Rule):
     criteria_id = "KISA-021"
     criteria_name = "적절하지 않은 난수 값 사용"

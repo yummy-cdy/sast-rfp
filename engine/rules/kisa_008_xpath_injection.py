@@ -4,6 +4,7 @@ _MESSAGE = "검증되지 않은 외부 입력값이 XPath 표현식에 직접 �
 _RECOMMENDATION = "XPath 표현식에는 외부 입력값을 직접 결합하지 말고, 변수 바인딩 방식을 사용하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class XpathInjectionPythonRule(Rule):
     criteria_id = "KISA-008"
     criteria_name = "XPath 삽입"
@@ -21,6 +22,7 @@ class XpathInjectionPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class XpathInjectionJavaRule(Rule):
     criteria_id = "KISA-008"
     criteria_name = "XPath 삽입"

@@ -58,6 +58,7 @@ def _python_scope_constants(children, source):
     return constants
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class DuplicateConstantValuePythonRule(Rule):
     """모듈/클래스 스코프에서 이름은 다르지만 값이 같은 상수(대문자 관례)를 탐지한다."""
 
@@ -124,6 +125,7 @@ def _java_scope_constants(class_body, source):
     return constants
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class DuplicateConstantValueJavaRule(Rule):
     """클래스 스코프에서 이름은 다르지만 값이 같은 final 상수 필드를 탐지한다."""
 
@@ -179,6 +181,7 @@ def _js_scope_constants(children, source):
     return constants
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class DuplicateConstantValueJsRule(Rule):
     """모듈 스코프에서 이름은 다르지만 값이 같은 const 상수(대문자 관례)를 탐지한다."""
 

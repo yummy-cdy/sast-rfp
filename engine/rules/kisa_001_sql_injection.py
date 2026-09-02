@@ -4,6 +4,7 @@ _MESSAGE = "사용자 입력값이 SQL 쿼리 문자열에 직접 결합되어 S
 _RECOMMENDATION = "문자열 결합 대신 파라미터 바인딩(Prepared Statement)을 사용하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SqlInjectionPythonRule(Rule):
     criteria_id = "KISA-001"
     criteria_name = "SQL 삽입"
@@ -21,6 +22,7 @@ class SqlInjectionPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SqlInjectionJsRule(Rule):
     criteria_id = "KISA-001"
     criteria_name = "SQL 삽입"
@@ -38,6 +40,7 @@ class SqlInjectionJsRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SqlInjectionJavaRule(Rule):
     criteria_id = "KISA-001"
     criteria_name = "SQL 삽입"

@@ -1,6 +1,7 @@
 from engine.base_rule import TaintedArgumentRule
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SsrfPythonRule(TaintedArgumentRule):
     criteria_id = "KISA-011"
     criteria_name = "서버사이드 요청 위조(SSRF)"

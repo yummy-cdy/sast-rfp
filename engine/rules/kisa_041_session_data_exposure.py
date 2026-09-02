@@ -1,6 +1,7 @@
 from engine.base_rule import Rule, _contains_identifier
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SessionDataExposurePythonRule(Rule):
     """요청별로 달라야 할 데이터를 세션이 아닌 전역(global) 변수에 저장하는 패턴을 탐지한다.
     여러 사용자의 요청이 하나의 전역 상태를 공유하게 되어, 다른 사용자의 데이터가 노출될 수 있다."""

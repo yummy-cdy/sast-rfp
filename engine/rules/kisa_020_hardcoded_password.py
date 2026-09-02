@@ -5,6 +5,7 @@ _MESSAGE = "비밀번호/토큰으로 추정되는 값이 소스코드에 평문
 _RECOMMENDATION = "비밀정보는 환경변수 또는 별도의 시크릿 관리 저장소(Vault 등)에서 로드하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class HardcodedPasswordPythonRule(Rule):
     criteria_id = "KISA-020"
     criteria_name = "하드코드된 비밀번호"
@@ -22,6 +23,7 @@ class HardcodedPasswordPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class HardcodedPasswordJsRule(Rule):
     criteria_id = "KISA-020"
     criteria_name = "하드코드된 비밀번호"
@@ -39,6 +41,7 @@ class HardcodedPasswordJsRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class HardcodedPasswordJavaRule(Rule):
     criteria_id = "KISA-020"
     criteria_name = "하드코드된 비밀번호"

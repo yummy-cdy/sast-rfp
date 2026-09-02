@@ -6,6 +6,7 @@ _SENSITIVE_PATH_RE = re.compile(r"(admin|delete|manage)", re.IGNORECASE)
 _AUTH_DECORATOR_RE = re.compile(r"(login_required|admin_required|permission_required|authenticated)", re.IGNORECASE)
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class MissingAuthenticationPythonRule(Rule):
     """관리자/삭제 등 민감한 경로로 추정되는 Flask 라우트에 인증 데코레이터가 없는 경우를 탐지한다."""
 

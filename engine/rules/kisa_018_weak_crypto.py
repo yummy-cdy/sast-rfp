@@ -1,6 +1,7 @@
 from engine.base_rule import Rule
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class WeakHashPythonRule(Rule):
     criteria_id = "KISA-018"
     criteria_name = "취약한 암호화 알고리즘 사용"
@@ -17,6 +18,7 @@ class WeakHashPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class WeakCryptoJavaRule(Rule):
     criteria_id = "KISA-018"
     criteria_name = "취약한 암호화 알고리즘 사용"

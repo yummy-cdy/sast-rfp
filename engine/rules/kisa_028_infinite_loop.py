@@ -21,6 +21,7 @@ def _contains_break(node, loop_types: set) -> bool:
     return False
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class InfiniteLoopPythonRule(Rule):
     criteria_id = "KISA-028"
     criteria_name = "종료되지 않는 반복문 또는 재귀함수"
@@ -44,6 +45,7 @@ class InfiniteLoopPythonRule(Rule):
         return findings
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class InfiniteLoopJsRule(InfiniteLoopPythonRule):
     languages = ["Javascript"]
     QUERIES = {
@@ -51,6 +53,7 @@ class InfiniteLoopJsRule(InfiniteLoopPythonRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class InfiniteLoopJavaRule(InfiniteLoopPythonRule):
     languages = ["Java"]
     QUERIES = {

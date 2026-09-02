@@ -5,6 +5,7 @@ _RECOMMENDATION = "권한/역할 필드는 외부 입력값으로 직접 설정�
 _FIELD_PATTERN = "(?i)^(is_admin|isadmin|role|is_staff|permission)$"
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class ImproperAuthorizationPythonRule(TaintedArgumentRule):
     criteria_id = "KISA-016"
     criteria_name = "부적절한 인가"
@@ -22,6 +23,7 @@ class ImproperAuthorizationPythonRule(TaintedArgumentRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class ImproperAuthorizationJsRule(TaintedArgumentRule):
     criteria_id = "KISA-016"
     criteria_name = "부적절한 인가"
@@ -39,6 +41,7 @@ class ImproperAuthorizationJsRule(TaintedArgumentRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class ImproperAuthorizationJavaRule(TaintedArgumentRule):
     criteria_id = "KISA-016"
     criteria_name = "부적절한 인가"

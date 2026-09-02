@@ -5,6 +5,7 @@ _RECOMMENDATION = "중요정보는 저장/전송 전에 반드시 암호화하�
 _FIELD_PATTERN = "(?i)^(ssn|credit_card|card_number|social_security)$"
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class UnencryptedSensitiveDataPythonRule(TaintedArgumentRule):
     criteria_id = "KISA-019"
     criteria_name = "암호화되지 않은 중요정보"
@@ -22,6 +23,7 @@ class UnencryptedSensitiveDataPythonRule(TaintedArgumentRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class UnencryptedSensitiveDataJsRule(TaintedArgumentRule):
     criteria_id = "KISA-019"
     criteria_name = "암호화되지 않은 중요정보"
@@ -39,6 +41,7 @@ class UnencryptedSensitiveDataJsRule(TaintedArgumentRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class UnencryptedSensitiveDataJavaRule(TaintedArgumentRule):
     criteria_id = "KISA-019"
     criteria_name = "암호화되지 않은 중요정보"

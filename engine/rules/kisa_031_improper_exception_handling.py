@@ -5,6 +5,7 @@ from engine.base_rule import Rule
 _BROAD_TYPE_RE = re.compile(r"(?i)\b(Exception|BaseException)\b")
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class ImproperExceptionHandlingPythonRule(Rule):
     """bare except: 또는 except Exception(/BaseException)처럼 지나치게 광범위한 예외 타입을 잡는 경우를 탐지한다.
     (비어 있는 catch 블록은 KISA-032에서 별도로 다룬다.)"""
@@ -36,6 +37,7 @@ class ImproperExceptionHandlingPythonRule(Rule):
         return findings
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class ImproperExceptionHandlingJavaRule(Rule):
     criteria_id = "KISA-031"
     criteria_name = "부적절한 예외처리"

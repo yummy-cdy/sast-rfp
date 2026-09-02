@@ -1,6 +1,7 @@
 from engine.base_rule import Rule
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class HashWithoutSaltPythonRule(Rule):
     """비밀번호로 추정되는 값을 salt 없이 곧바로 해시하는 패턴을 탐지한다.
 

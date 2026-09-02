@@ -4,6 +4,7 @@ _MESSAGE = "외부 입력값이 결합된 문자열이 운영체제 명령 실�
 _RECOMMENDATION = "셸을 경유하지 않는 배열 인자 실행 방식을 사용하고, 외부 입력값은 허용 목록으로 검증하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class OsCommandInjectionPythonRule(Rule):
     criteria_id = "KISA-004"
     criteria_name = "운영체제 명령어 삽입"
@@ -21,6 +22,7 @@ class OsCommandInjectionPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class OsCommandInjectionJsRule(Rule):
     criteria_id = "KISA-004"
     criteria_name = "운영체제 명령어 삽입"
@@ -38,6 +40,7 @@ class OsCommandInjectionJsRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class OsCommandInjectionJavaRule(Rule):
     criteria_id = "KISA-004"
     criteria_name = "운영체제 명령어 삽입"

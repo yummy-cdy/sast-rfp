@@ -8,6 +8,7 @@ def _modifiers_text(node, source) -> str:
     return ""
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class PublicDataToPrivateArrayJavaRule(Rule):
     """생성자/메소드 파라미터로 받은 배열을 clone() 없이 곧바로 private 배열 필드에 저장하는 패턴을 탐지한다."""
 

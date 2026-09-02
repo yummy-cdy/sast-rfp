@@ -5,6 +5,7 @@ _RECOMMENDATION = "주석에 실제 계정정보/키 값을 남기지 말고, �
 _REGEX = "(?i)(password|passwd|secret|api[_-]?key).*[:=]"
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SensitiveInfoInCommentPythonRule(Rule):
     criteria_id = "KISA-025"
     criteria_name = "주석문 안에 포함된 시스템 주요정보"
@@ -18,6 +19,7 @@ class SensitiveInfoInCommentPythonRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SensitiveInfoInCommentJsRule(Rule):
     criteria_id = "KISA-025"
     criteria_name = "주석문 안에 포함된 시스템 주요정보"
@@ -31,6 +33,7 @@ class SensitiveInfoInCommentJsRule(Rule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class SensitiveInfoInCommentJavaRule(Rule):
     criteria_id = "KISA-025"
     criteria_name = "주석문 안에 포함된 시스템 주요정보"

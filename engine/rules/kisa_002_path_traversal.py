@@ -4,6 +4,7 @@ _MESSAGE = "외부 입력값이 검증 없이 파일 경로에 사용되어 시�
 _RECOMMENDATION = "경로를 화이트리스트로 검증하거나 정규화(normpath) 후 허용된 디렉터리 하위인지 확인하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class PathTraversalOpenPythonRule(TaintedArgumentRule):
     criteria_id = "KISA-002"
     criteria_name = "경로 조작 및 자원 삽입"
@@ -21,6 +22,7 @@ class PathTraversalOpenPythonRule(TaintedArgumentRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class ZipSlipJavaRule(Rule):
     """압축 해제 시 엔트리 이름을 검증 없이 File 경로에 그대로 사용하는 Zip Slip 패턴."""
 

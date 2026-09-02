@@ -4,6 +4,7 @@ _MESSAGE = "업로드된 파일을 원본 파일명 그대로 저장하여 실�
 _RECOMMENDATION = "저장 파일명은 서버에서 새로 생성(UUID 등)하고, 확장자를 허용 목록으로 검증하십시오."
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class DangerousFileUploadPythonRule(TaintedArgumentRule):
     criteria_id = "KISA-005"
     criteria_name = "위험한 형식 파일 업로드"
@@ -22,6 +23,7 @@ class DangerousFileUploadPythonRule(TaintedArgumentRule):
     }
 
 
+# SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
 class DangerousFileUploadJavaRule(Rule):
     """MultipartFile의 원본 파일명(getOriginalFilename)을 그대로 저장 경로에 사용하는 패턴."""
 
