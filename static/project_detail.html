@@ -90,6 +90,23 @@
       </div>
     </main>
   </div>
+
+  <div id="evidenceModal" class="sast-modal-backdrop hidden" onclick="if (event.target === this) closeEvidenceModal()">
+    <div class="sast-modal">
+      <div class="sast-modal-header">
+        <div>
+          <h3 id="evidenceModalTitle" class="sast-card-title mb-1"></h3>
+          <p id="evidenceModalMeta" class="sast-text-muted sast-mono text-sm"></p>
+        </div>
+        <button class="sast-modal-close" onclick="closeEvidenceModal()">&times;</button>
+      </div>
+      <div class="sast-modal-body">
+        <code id="evidenceModalCode" class="sast-evidence-block"></code>
+        <p id="evidenceModalRecommendation" class="sast-text-muted mt-3"></p>
+      </div>
+    </div>
+  </div>
+
   <script src="/static/common.js"></script>
   <script src="/static/project_detail.js"></script>
 </body>

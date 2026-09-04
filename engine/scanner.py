@@ -9,17 +9,54 @@ class AnalysisTimeoutError(Exception):
     """SEC-009: 분석 실행 시간이 허용 한도를 초과했다."""
 
 
-def scan_file(file_path: str, language: str) -> list[dict]:
+# 압축/번들링(minify)된 코드로 보이는 파일을 걸러내기 위한 임계값.
+# 이런 파일은 사람이 작성한 소스가 아니라 서드파티 라이브러리 산출물(예: Monaco
+# Editor, webpack/vite 번들)인 경우가 대부분이라, 구조 분석 결과가 무의미하고
+# (단일 문자로 축약된 변수명 등) 근거에 읽을 수 있는 코드 맥락을 담을 수 없다.
+_MINIFIED_MAX_LINE_LEN = 2000
+_MINIFIED_AVG_LINE_LEN = 500
+
+
+def _looks_minified(source_bytes: bytes) -> bool:
+    if not source_bytes:
+        return False
+    text = source_bytes.decode("utf-8", errors="replace")
+    lines = text.split("\n")
+    if not lines:
+        return False
+    max_line_len = max(len(line) for line in lines)
+    avg_line_len = len(text) / len(lines)
+    return max_line_len > _MINIFIED_MAX_LINE_LEN or avg_line_len > _MINIFIED_AVG_LINE_LEN
+
+
+# 널리 쓰이는 서드파티/빌드 산출물 디렉터리 이름 — 대부분의 린터/SAST 도구가
+# 기본적으로 제외하는 관례를 따른다. 사용자가 작성하지 않은 코드를 진단 대상에서
+# 뺀다 (예: 프런트엔드 프로젝트에 그대로 커밋된 라이브러리 번들).
+_VENDOR_DIR_NAMES = {"node_modules", "vendor", "vendors", "dist", "build", "third_party", "thirdparty"}
+
+
+def _is_vendor_path(rel_path: str) -> bool:
+    parts = rel_path.replace("\\", "/").split("/")
+    if any(part.lower() in _VENDOR_DIR_NAMES for part in parts[:-1]):
+        return True
+    filename = parts[-1].lower()
+    return ".min." in filename
+
+
+def scan_file(file_path: str, language: str, display_path: str | None = None) -> list[dict]:
     source_bytes = read_source_bytes(file_path)
     if source_bytes is None:
+        return []
+    if _looks_minified(source_bytes):
         return []
 
     tree = parse_source(source_bytes, language)
     rules = get_rules_for_language(language)
+    reported_path = display_path if display_path is not None else file_path
 
     results: list[dict] = []
     for rule in rules:
-        for finding in rule.find(tree, source_bytes, file_path, language):
+        for finding in rule.find(tree, source_bytes, reported_path, language):
             results.append(
                 {
                     "criteria_id": finding.criteria_id,
@@ -55,6 +92,11 @@ def run_analysis(source_dir: str, target_language: str, timeout_seconds: float |
             if language != target_language:
                 continue
 
-            all_results.extend(scan_file(file_path, language))
+            # 결과 화면/DB에 로컬 서버의 절대 경로가 그대로 노출되지 않도록,
+            # 업로드 소스 루트 기준 상대 경로로 저장한다.
+            display_path = os.path.relpath(file_path, source_dir)
+            if _is_vendor_path(display_path):
+                continue
+            all_results.extend(scan_file(file_path, language, display_path))
 
     return all_results

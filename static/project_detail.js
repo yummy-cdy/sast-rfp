@@ -138,22 +138,51 @@ function renderSeveritySummary(bySeverity) {
 
 const RESULTS_PAGE_SIZE = 15;
 let resultsPage = 1;
+let resultsById = {};
 
-function renderEvidenceBlock(r) {
+function getLineNumber(r) {
+  // DiagnosticResult에는 line_number 컬럼이 없고, 스캔 시점의 AST 노드 위치
+  // (raw_result.start_point = [0-indexed row, col])만 저장되어 있다.
+  const startPoint = r.raw_result?.start_point;
+  return startPoint ? startPoint[0] + 1 : null;
+}
+
+function highlightedEvidenceHtml(r) {
   const lines = (r.evidence || "").split("\n");
   const contextStartLine = r.raw_result?.context_start_line;
+  const lineNumber = getLineNumber(r);
   const highlightIndex =
-    contextStartLine != null ? r.line_number - contextStartLine : -1;
+    contextStartLine != null && lineNumber != null ? lineNumber - contextStartLine : -1;
 
-  const body = lines
+  return lines
     .map((line, i) =>
       i === highlightIndex
         ? `<span class="sast-evidence-hl">${escapeHtml(line)}</span>`
         : escapeHtml(line)
     )
     .join("\n");
+}
 
-  return `<code class="sast-evidence-block">${body}</code>`;
+function renderEvidenceBlock(r) {
+  return `<code class="sast-evidence-block" onclick="openEvidenceModal(${r.result_id})">${highlightedEvidenceHtml(
+    r
+  )}</code><span class="sast-evidence-more">클릭하여 전체 코드 보기 &rarr;</span>`;
+}
+
+function openEvidenceModal(resultId) {
+  const r = resultsById[resultId];
+  if (!r) return;
+  document.getElementById("evidenceModalTitle").textContent =
+    `${r.criteria_name} (${r.criteria_id})`;
+  document.getElementById("evidenceModalMeta").textContent =
+    `${r.file_path}:${getLineNumber(r) ?? "?"}`;
+  document.getElementById("evidenceModalCode").innerHTML = highlightedEvidenceHtml(r);
+  document.getElementById("evidenceModalRecommendation").textContent = r.recommendation || "";
+  document.getElementById("evidenceModal").classList.remove("hidden");
+}
+
+function closeEvidenceModal() {
+  document.getElementById("evidenceModal").classList.add("hidden");
 }
 
 async function loadResults() {
@@ -178,6 +207,7 @@ async function loadResults() {
   renderSeveritySummary(data.by_severity);
 
   const results = data.items;
+  resultsById = Object.fromEntries(results.map((r) => [r.result_id, r]));
 
   if (results.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5">${emptyStateHtml("발견된 항목이 없습니다.", "분석을 실행하거나 필터 조건을 변경해보세요.")}</td></tr>`;
@@ -191,7 +221,7 @@ async function loadResults() {
     <tr>
       <td>${escapeHtml(r.criteria_name)} <span class="sast-text-faint sast-mono">(${r.criteria_id})</span></td>
       <td class="text-center"><span class="${severityBadgeClass(r.severity)}">${r.severity}</span></td>
-      <td class="truncate max-w-xs" title="${escapeHtml(r.file_path)}">${escapeHtml(r.file_path.split("\\\\").pop().split("/").pop())}:${r.line_number}</td>
+      <td class="truncate max-w-xs sast-mono" title="${escapeHtml(r.file_path)}:${getLineNumber(r) ?? "?"}">${escapeHtml(r.file_path)}:${getLineNumber(r) ?? "?"}</td>
       <td>${renderEvidenceBlock(r)}</td>
       <td class="sast-text-muted">${escapeHtml(r.recommendation || "")}</td>
     </tr>`
