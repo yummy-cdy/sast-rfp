@@ -8,6 +8,10 @@ def sql_safe(user_input, cursor):
     cursor.execute("SELECT * FROM admin WHERE id = %s", (user_input,))
 
 
+def xss_safe(user_input):
+    return escape(user_input)
+
+
 def hash_safe(data):
     return hashlib.sha256(data)
 
@@ -29,6 +33,27 @@ def exception_safe():
 
 def command_safe(args):
     subprocess.run(["ls", args], shell=False)
+
+
+def os_command_indirect_safe():
+    import os
+    cmd = "ls -la"
+    os.system(cmd)
+
+
+def sql_indirect_safe(name):
+    query = "select * from member where name=%s"
+    return Member.objects.raw(query, [name])
+
+
+def ssrf_urlopen_safe():
+    from urllib.request import urlopen
+    return urlopen("https://example.com/fixed")
+
+
+def xpath_indirect_safe():
+    query = "//user[@role='admin']"
+    return tree.xpath(query)
 
 
 def upload_safe(uploaded_file):

@@ -12,12 +12,38 @@ def sql_injection(user_input):
     cursor.execute(f"SELECT * FROM admin WHERE id = '{user_input}'")
 
 
+def xss(user_input):
+    return Markup(user_input)
+
+
 def path_traversal():
     return open(request.GET['file_name'], 'r')
 
 
 def os_command_injection(user_input):
     os.system("ls " + user_input)
+
+
+def os_command_injection_indirect(user_input):
+    cmd = "ls " + user_input
+    os.system(cmd)
+
+
+def subprocess_command_injection(user_input):
+    import subprocess
+    cmd_str = "cmd /c backuplog.bat " + user_input
+    subprocess.run(cmd_str, shell=True)
+
+
+def sql_injection_indirect(user_input):
+    query = "SELECT * FROM member WHERE name='" + user_input + "'"
+    return Member.objects.raw(query)
+
+
+def ssrf_urlopen():
+    from urllib.request import urlopen
+    url = request.GET['url']
+    return urlopen(url)
 
 
 def code_injection(user_code):
@@ -69,6 +95,11 @@ def xquery_injection(name):
 
 def xpath_injection(name):
     return tree.xpath("//user[@name='" + name + "']")
+
+
+def xpath_injection_indirect(name):
+    query = "//user[@name='" + name + "']"
+    return tree.xpath(query)
 
 
 def ldap_injection(username):

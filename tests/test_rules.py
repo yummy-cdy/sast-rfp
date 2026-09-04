@@ -11,7 +11,7 @@ FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
 EXPECTED_VULN_CRITERIA = {
     "Python": {
-        "KISA-001", "KISA-002", "KISA-004", "KISA-005", "KISA-006", "KISA-007",
+        "KISA-001", "KISA-002", "KISA-003", "KISA-004", "KISA-005", "KISA-006", "KISA-007",
         "KISA-008", "KISA-009", "KISA-010", "KISA-011", "KISA-012", "KISA-014",
         "KISA-015", "KISA-016", "KISA-017", "KISA-018", "KISA-019", "KISA-020",
         "KISA-021", "KISA-022", "KISA-023", "KISA-024", "KISA-025", "KISA-026",
@@ -19,16 +19,16 @@ EXPECTED_VULN_CRITERIA = {
         "KISA-034", "KISA-035", "KISA-037", "KISA-039", "KISA-041", "KISA-042", "KISA-046",
     },
     "Javascript": {
-        "KISA-001", "KISA-003", "KISA-004", "KISA-012", "KISA-014", "KISA-016",
-        "KISA-019", "KISA-020", "KISA-021", "KISA-024", "KISA-025", "KISA-028",
-        "KISA-030", "KISA-032", "KISA-036", "KISA-039", "KISA-043",
+        "KISA-001", "KISA-003", "KISA-004", "KISA-006", "KISA-011", "KISA-012", "KISA-014",
+        "KISA-016", "KISA-019", "KISA-020", "KISA-021", "KISA-022", "KISA-024", "KISA-025",
+        "KISA-026", "KISA-028", "KISA-030", "KISA-032", "KISA-036", "KISA-039", "KISA-043",
     },
     "Java": {
-        "KISA-001", "KISA-002", "KISA-004", "KISA-005", "KISA-008", "KISA-012",
-        "KISA-013", "KISA-016", "KISA-018", "KISA-019", "KISA-020", "KISA-021",
-        "KISA-024", "KISA-025", "KISA-028", "KISA-029", "KISA-030", "KISA-031",
-        "KISA-032", "KISA-033", "KISA-034", "KISA-038", "KISA-039", "KISA-040", "KISA-043",
-        "KISA-044", "KISA-045", "KISA-047", "KISA-048", "KISA-049",
+        "KISA-001", "KISA-002", "KISA-003", "KISA-004", "KISA-005", "KISA-006", "KISA-008",
+        "KISA-011", "KISA-012", "KISA-013", "KISA-016", "KISA-018", "KISA-019", "KISA-020",
+        "KISA-021", "KISA-022", "KISA-024", "KISA-025", "KISA-026", "KISA-028", "KISA-029",
+        "KISA-030", "KISA-031", "KISA-032", "KISA-033", "KISA-034", "KISA-038", "KISA-039",
+        "KISA-040", "KISA-043", "KISA-044", "KISA-045", "KISA-047", "KISA-048", "KISA-049",
     },
 }
 

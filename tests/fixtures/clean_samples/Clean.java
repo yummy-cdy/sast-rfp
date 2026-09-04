@@ -1,6 +1,7 @@
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.io.FileInputStream;
+import java.net.URL;
 
 class Clean {
     static final int MAX_RETRY = 5;
@@ -125,5 +126,23 @@ class Clean {
 
     void commandApiSafe() throws Exception {
         Runtime.getRuntime().exec(new String[]{"ls", "-la"});
+    }
+
+    String secretKey = System.getenv("SECRET_KEY");
+
+    void xssSafe(javax.servlet.http.HttpServletResponse response) throws Exception {
+        response.getWriter().println("static text");
+    }
+
+    void ssrfSafe() throws Exception {
+        new URL("https://example.com/fixed").openStream();
+    }
+
+    void openRedirectSafe(javax.servlet.http.HttpServletResponse response) throws Exception {
+        response.sendRedirect("/home");
+    }
+
+    void hashWithSaltSafe(String password, String salt) throws Exception {
+        MessageDigest.getInstance("SHA-256").digest((password + salt).getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 }

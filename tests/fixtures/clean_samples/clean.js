@@ -65,3 +65,17 @@ function headerSafe(res) {
 
 const MAX_RETRY = 5;
 const TIMEOUT_SEC = 10;
+
+const secretKey = process.env.SECRET_KEY;
+
+function ssrfSafe() {
+  axios.get("https://example.com/fixed");
+}
+
+function openRedirectSafe(res) {
+  res.redirect("/home");
+}
+
+function hashWithSaltSafe(password, salt) {
+  crypto.createHash("sha256").update(password + salt).digest("hex");
+}

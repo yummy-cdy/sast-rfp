@@ -66,3 +66,17 @@ function systemDataExposure(res) {
 
 const MAX_RETRY = 5;
 const TIMEOUT_SEC = 5;
+
+const secretKey = "abc123456789key";
+
+function ssrf(req) {
+  axios.get(req.query.url);
+}
+
+function openRedirect(res, req) {
+  res.redirect(req.query.next);
+}
+
+function hashWithoutSalt(password) {
+  crypto.createHash("sha256").update(password).digest("hex");
+}

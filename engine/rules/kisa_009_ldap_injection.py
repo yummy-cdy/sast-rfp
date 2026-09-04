@@ -1,8 +1,8 @@
-from engine.base_rule import Rule
+from engine.base_rule import ConcatenatedArgumentRule
 
 
 # SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
-class LdapInjectionPythonRule(Rule):
+class LdapInjectionPythonRule(ConcatenatedArgumentRule):
     criteria_id = "KISA-009"
     criteria_name = "LDAP 삽입"
     category = "입력데이터 검증 및 표현"
@@ -14,6 +14,6 @@ class LdapInjectionPythonRule(Rule):
         "Python": """
         (call
           function: (attribute attribute: (identifier) @m (#match? @m "^(search_s|search_ext_s)$"))
-          arguments: (argument_list [(binary_operator) (string (interpolation))] @target))
+          arguments: (argument_list [(binary_operator) (string (interpolation)) (identifier)] @target))
         """
     }

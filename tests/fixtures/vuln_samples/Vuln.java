@@ -2,6 +2,7 @@ import java.security.MessageDigest;
 import java.util.Random;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
 
 class Vuln {
     String password = "hunter2";
@@ -128,5 +129,23 @@ class Vuln {
 
     void osCommandApiMisuse() throws Exception {
         Runtime.getRuntime().exec("ls -la");
+    }
+
+    String secretKey = "abc123456789key";
+
+    void xss(javax.servlet.http.HttpServletResponse response, javax.servlet.http.HttpServletRequest request) throws Exception {
+        response.getWriter().println(request.getParameter("name"));
+    }
+
+    void ssrf(javax.servlet.http.HttpServletRequest request) throws Exception {
+        new URL(request.getParameter("url")).openStream();
+    }
+
+    void openRedirect(javax.servlet.http.HttpServletResponse response, javax.servlet.http.HttpServletRequest request) throws Exception {
+        response.sendRedirect(request.getParameter("next"));
+    }
+
+    void hashWithoutSalt(String password) throws Exception {
+        MessageDigest.getInstance("SHA-256").digest(password.getBytes());
     }
 }

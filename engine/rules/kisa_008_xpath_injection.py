@@ -1,11 +1,11 @@
-from engine.base_rule import Rule
+from engine.base_rule import ConcatenatedArgumentRule, Rule
 
 _MESSAGE = "검증되지 않은 외부 입력값이 XPath 표현식에 직접 결합되어 인증 우회/데이터 노출이 가능합니다."
 _RECOMMENDATION = "XPath 표현식에는 외부 입력값을 직접 결합하지 말고, 변수 바인딩 방식을 사용하십시오."
 
 
 # SFR-011: 초기 대상 언어(Java/Javascript/Python) 소스코드에 대한 구조화된 코드 분석 기반 보안 취약점 진단 항목 구현
-class XpathInjectionPythonRule(Rule):
+class XpathInjectionPythonRule(ConcatenatedArgumentRule):
     criteria_id = "KISA-008"
     criteria_name = "XPath 삽입"
     category = "입력데이터 검증 및 표현"
@@ -17,7 +17,7 @@ class XpathInjectionPythonRule(Rule):
         "Python": """
         (call
           function: (attribute attribute: (identifier) @m (#eq? @m "xpath"))
-          arguments: (argument_list [(binary_operator) (string (interpolation))] @target))
+          arguments: (argument_list [(binary_operator) (string (interpolation)) (identifier)] @target))
         """
     }
 

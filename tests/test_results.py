@@ -53,7 +53,7 @@ def test_execution_detail_endpoint(client, admin_token):
     assert res.status_code == 200
     body = res.json()
     assert body["status"] == "COMP"
-    assert body["summary"]["findings_count"] == 47
+    assert body["summary"]["findings_count"] == 53
 
 
 def test_execution_results_endpoint_supports_criteria_filter(client, admin_token):
@@ -63,8 +63,8 @@ def test_execution_results_endpoint_supports_criteria_filter(client, admin_token
         headers=auth_headers(admin_token),
     )
     body = res.json()
-    assert len(body) == 1
-    assert body[0]["criteria_id"] == "KISA-001"
+    assert len(body) == 2
+    assert all(r["criteria_id"] == "KISA-001" for r in body)
 
 
 def test_diagnostic_result_preserves_criteria_snapshot(client, admin_token):
