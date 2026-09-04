@@ -53,11 +53,12 @@ def test_full_pipeline_upload_analyze_results(client, admin_token):
     assert executions[0]["executed_by"] == "admin"
 
     results_res = client.get(
-        f"/api/projects/{project_id}/results", headers=auth_headers(admin_token)
+        f"/api/projects/{project_id}/results?page_size=100", headers=auth_headers(admin_token)
     )
-    results = results_res.json()
-    assert len(results) == 53
-    assert all(r["target_language"] == "Python" for r in results)
+    results_body = results_res.json()
+    assert results_body["total"] == 53
+    assert len(results_body["items"]) == 53
+    assert all(r["target_language"] == "Python" for r in results_body["items"])
 
 
 def test_clean_source_yields_no_findings(client, admin_token):

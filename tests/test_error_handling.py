@@ -56,7 +56,8 @@ def test_results_for_project_without_analysis_is_empty_list(client, admin_token)
     project_id = _create_project(client, admin_token)
     res = client.get(f"/api/projects/{project_id}/results", headers=auth_headers(admin_token))
     assert res.status_code == 200
-    assert res.json() == []
+    assert res.json()["items"] == []
+    assert res.json()["total"] == 0
 
 
 def test_get_project_not_found_returns_404(client, admin_token):

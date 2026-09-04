@@ -48,7 +48,7 @@ class Rule:
         return query.matches(tree.root_node)
 
     def _build_finding(self, node, source: bytes, file_path: str, language: str) -> Finding:
-        evidence = source[node.start_byte : node.end_byte].decode("utf-8", errors="replace")
+        evidence, context_start_line = _extract_context(node, source)
         return Finding(
             criteria_id=self.criteria_id,
             criteria_name=self.criteria_name,
@@ -57,13 +57,16 @@ class Rule:
             line_number=node.start_point[0] + 1,
             column=node.start_point[1],
             message=self.message,
-            evidence=evidence.strip()[:500],
+            evidence=evidence[:3000],
             recommendation=self.recommendation,
             raw_result={
                 "node_type": node.type,
                 "start_point": list(node.start_point),
                 "end_point": list(node.end_point),
                 "language": language,
+                # 근거(evidence)에서 실제 탐지 줄이 몇 번째 줄인지 프론트에서
+                # 강조 표시할 수 있도록, 근거 텍스트의 시작 줄 번호를 같이 내려준다.
+                "context_start_line": context_start_line,
             },
         )
 
@@ -96,6 +99,44 @@ def _contains_identifier(node, names: set[str]) -> bool:
     if node.type == "identifier" and node.text.decode("utf-8", errors="replace") in names:
         return True
     return any(_contains_identifier(child, names) for child in node.children)
+
+
+# 언어별 "{}"/들여쓰기 블록 노드 타입 — 근거(evidence)를 한 줄이 아니라
+# 탐지된 지점을 감싸는 블록 단위로 보여주기 위해 사용한다.
+_BLOCK_TYPES = {"block", "statement_block"}  # Python(들여쓰기)/Java/Javascript 전부 이 이름을 씀
+_MAX_CONTEXT_LINES = 25
+
+
+def _find_enclosing_block(node):
+    current = node.parent
+    while current is not None:
+        if current.type in _BLOCK_TYPES:
+            return current
+        current = current.parent
+    return None
+
+
+def _extract_context(node, source: bytes) -> tuple[str, int]:
+    """탐지된 노드를 감싸는 블록 단위로 근거를 추출한다. 블록을 찾을 수 없으면(예:
+    모듈 최상위 문장) 노드 자체의 텍스트를 사용한다. 블록이 너무 크면 탐지된 줄
+    주변으로 잘라낸다. (근거 텍스트, 그 첫 줄의 1-indexed 줄 번호)를 반환한다."""
+    block = _find_enclosing_block(node)
+    if block is None:
+        text = source[node.start_byte : node.end_byte].decode("utf-8", errors="replace")
+        return text.strip(), node.start_point[0] + 1
+
+    start_line = block.start_point[0]
+    end_line = block.end_point[0]
+    node_line = node.start_point[0]
+
+    if end_line - start_line + 1 > _MAX_CONTEXT_LINES:
+        half = _MAX_CONTEXT_LINES // 2
+        start_line = max(start_line, node_line - half)
+        end_line = min(end_line, node_line + half)
+
+    lines = source.decode("utf-8", errors="replace").splitlines()
+    snippet = "\n".join(lines[start_line : end_line + 1])
+    return snippet.strip("\n"), start_line + 1
 
 
 def _find_enclosing_scope(node):

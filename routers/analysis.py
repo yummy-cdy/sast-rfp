@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from sqlalchemy.orm import Session
 
 import models
@@ -215,6 +215,8 @@ def list_executions(
 def get_analysis_results(
     project: models.Project = Depends(require_project_access),
     severity: Optional[str] = None,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=50, ge=1, le=200),
     db: Session = Depends(get_db),
 ):
     execution = (
@@ -228,7 +230,7 @@ def get_analysis_results(
     )
 
     if not execution:
-        return []
+        return {"items": [], "total": 0, "page": 1, "page_size": page_size, "by_severity": {}}
 
     query = db.query(models.DiagnosticResult).filter(
         models.DiagnosticResult.execution_id == execution.execution_id
@@ -238,7 +240,23 @@ def get_analysis_results(
     if severity:
         query = query.filter(models.DiagnosticResult.severity == severity)
 
-    return query.all()
+    # SFR-017: 대량 findings 화면 표시 시 페이징 처리
+    total = query.count()
+    items = (
+        query.order_by(models.DiagnosticResult.result_id)
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        # 심각도별 전체 건수(필터/페이지에 영향받지 않음) - 상단 요약 위젯용
+        "by_severity": (execution.summary or {}).get("by_severity", {}),
+    }
 
 
 # SFR-016: 실행 건 상세 조회 (상태/오류정보 등). 권한 있는 사용자만 조회 가능 (SEC-009).

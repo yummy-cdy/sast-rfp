@@ -43,8 +43,8 @@ def test_severity_filter_narrows_results(client, admin_token):
         f"/api/projects/{project_id}/results?severity=High", headers=auth_headers(admin_token)
     )
 
-    assert len(high_res.json()) < len(all_res.json())
-    assert all(r["severity"] == "High" for r in high_res.json())
+    assert high_res.json()["total"] < all_res.json()["total"]
+    assert all(r["severity"] == "High" for r in high_res.json()["items"])
 
 
 def test_execution_detail_endpoint(client, admin_token):
@@ -71,7 +71,7 @@ def test_diagnostic_result_preserves_criteria_snapshot(client, admin_token):
     """DAR-008: 분석 시점의 진단 항목 식별자/명칭/기준/언어/심각도/신뢰도를 보존한다."""
     project_id, _ = _analyzed_project(client, admin_token)
     res = client.get(f"/api/projects/{project_id}/results", headers=auth_headers(admin_token))
-    result = res.json()[0]
+    result = res.json()["items"][0]
     for field in [
         "criteria_id", "criteria_name", "standard_id", "target_language",
         "severity", "confidence", "recommendation",

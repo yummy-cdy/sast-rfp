@@ -111,16 +111,13 @@ const SEVERITY_STAT_SPEC = [
   { key: "Low", color: "#64748b", track: "#e2e8f0" },
 ];
 
-function renderSeveritySummary(results) {
+function renderSeveritySummary(bySeverity) {
   const summaryEl = document.getElementById("severitySummary");
-  const total = results.length;
+  const counts = { High: 0, Medium: 0, Low: 0, ...bySeverity };
+  const total = counts.High + counts.Medium + counts.Low;
   if (total === 0) {
     summaryEl.innerHTML = "";
     return;
-  }
-  const counts = { High: 0, Medium: 0, Low: 0 };
-  for (const r of results) {
-    if (counts[r.severity] !== undefined) counts[r.severity]++;
   }
   summaryEl.innerHTML = SEVERITY_STAT_SPEC.map((spec) => {
     const count = counts[spec.key];
@@ -139,25 +136,52 @@ function renderSeveritySummary(results) {
   }).join("");
 }
 
+const RESULTS_PAGE_SIZE = 50;
+let resultsPage = 1;
+
+function renderEvidenceBlock(r) {
+  const lines = (r.evidence || "").split("\n");
+  const contextStartLine = r.raw_result?.context_start_line;
+  const highlightIndex =
+    contextStartLine != null ? r.line_number - contextStartLine : -1;
+
+  const body = lines
+    .map((line, i) =>
+      i === highlightIndex
+        ? `<span class="sast-evidence-hl">${escapeHtml(line)}</span>`
+        : escapeHtml(line)
+    )
+    .join("\n");
+
+  return `<code class="sast-evidence-block">${body}</code>`;
+}
+
 async function loadResults() {
-  const res = await apiFetch(`/api/projects/${projectId}/results`);
-  const allResults = await res.json();
+  const severity = document.getElementById("severityFilter").value;
+  const res = await apiFetch(
+    `/api/projects/${projectId}/results?page=${resultsPage}&page_size=${RESULTS_PAGE_SIZE}${
+      severity ? `&severity=${encodeURIComponent(severity)}` : ""
+    }`
+  );
   const tbody = document.getElementById("resultTableBody");
   const summaryEl = document.getElementById("severitySummary");
+  const paginationEl = document.getElementById("resultsPagination");
 
   if (!res.ok) {
     tbody.innerHTML = `<tr><td colspan="5">${emptyStateHtml("결과를 불러오지 못했습니다.")}</td></tr>`;
     summaryEl.innerHTML = "";
+    paginationEl.innerHTML = "";
     return;
   }
 
-  renderSeveritySummary(allResults);
+  const data = await res.json();
+  renderSeveritySummary(data.by_severity);
 
-  const severity = document.getElementById("severityFilter").value;
-  const results = severity ? allResults.filter((r) => r.severity === severity) : allResults;
+  const results = data.items;
 
   if (results.length === 0) {
     tbody.innerHTML = `<tr><td colspan="5">${emptyStateHtml("발견된 항목이 없습니다.", "분석을 실행하거나 필터 조건을 변경해보세요.")}</td></tr>`;
+    paginationEl.innerHTML = "";
     return;
   }
 
@@ -167,15 +191,47 @@ async function loadResults() {
     <tr>
       <td>${escapeHtml(r.criteria_name)} <span class="sast-text-faint sast-mono">(${r.criteria_id})</span></td>
       <td class="text-center"><span class="${severityBadgeClass(r.severity)}">${r.severity}</span></td>
-      <td class="truncate max-w-xs" title="${escapeHtml(r.file_path)}">${escapeHtml(r.file_path.split("\\\\").pop().split("/").pop())}</td>
-      <td class="truncate max-w-sm sast-mono" title="${escapeHtml(r.evidence)}">${escapeHtml(r.evidence)}</td>
+      <td class="truncate max-w-xs" title="${escapeHtml(r.file_path)}">${escapeHtml(r.file_path.split("\\\\").pop().split("/").pop())}:${r.line_number}</td>
+      <td>${renderEvidenceBlock(r)}</td>
       <td class="sast-text-muted">${escapeHtml(r.recommendation || "")}</td>
     </tr>`
     )
     .join("");
+
+  renderPagination(data.total, data.page, data.page_size, paginationEl);
 }
 
-document.getElementById("severityFilter").addEventListener("change", loadResults);
+function renderPagination(total, page, pageSize, el) {
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const start = (page - 1) * pageSize + 1;
+  const end = Math.min(total, page * pageSize);
+
+  el.innerHTML = `
+    <span class="sast-text-muted">전체 ${total}건 중 ${start}-${end}건 표시</span>
+    <div class="flex items-center gap-2">
+      <button class="sast-btn sast-btn-secondary" id="resultsPrevBtn" ${page <= 1 ? "disabled" : ""}>이전</button>
+      <span class="sast-text-muted">${page} / ${totalPages} 페이지</span>
+      <button class="sast-btn sast-btn-secondary" id="resultsNextBtn" ${page >= totalPages ? "disabled" : ""}>다음</button>
+    </div>`;
+
+  document.getElementById("resultsPrevBtn").addEventListener("click", () => {
+    if (resultsPage > 1) {
+      resultsPage--;
+      loadResults();
+    }
+  });
+  document.getElementById("resultsNextBtn").addEventListener("click", () => {
+    if (resultsPage < totalPages) {
+      resultsPage++;
+      loadResults();
+    }
+  });
+}
+
+document.getElementById("severityFilter").addEventListener("change", () => {
+  resultsPage = 1;
+  loadResults();
+});
 
 // --- 권한 관리 (관리자 전용, SFR-005) ---
 async function loadPermissionPanel() {

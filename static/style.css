@@ -528,3 +528,25 @@ body {
 .sast-text-muted { color: var(--sast-text-muted); }
 .sast-text-faint { color: var(--sast-text-faint); }
 .sast-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+/* ---- Evidence code block (탐지 지점을 감싸는 블록 단위 근거) ---- */
+.sast-evidence-block {
+  display: block;
+  max-width: 28rem;
+  max-height: 8rem;
+  overflow: auto;
+  white-space: pre;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  background: var(--sast-bg);
+  border: 1px solid var(--sast-border);
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+.sast-evidence-block .sast-evidence-hl {
+  display: block;
+  background: #fef3c7;
+  margin: 0 -8px;
+  padding: 0 8px;
+}
