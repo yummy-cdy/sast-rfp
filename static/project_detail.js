@@ -136,7 +136,7 @@ function renderSeveritySummary(bySeverity) {
   }).join("");
 }
 
-const RESULTS_PAGE_SIZE = 50;
+const RESULTS_PAGE_SIZE = 15;
 let resultsPage = 1;
 
 function renderEvidenceBlock(r) {

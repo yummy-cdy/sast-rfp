@@ -216,7 +216,7 @@ def get_analysis_results(
     project: models.Project = Depends(require_project_access),
     severity: Optional[str] = None,
     page: int = Query(default=1, ge=1),
-    page_size: int = Query(default=50, ge=1, le=200),
+    page_size: int = Query(default=15, ge=1, le=200),
     db: Session = Depends(get_db),
 ):
     execution = (

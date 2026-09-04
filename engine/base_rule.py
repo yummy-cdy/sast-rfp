@@ -105,6 +105,10 @@ def _contains_identifier(node, names: set[str]) -> bool:
 # 탐지된 지점을 감싸는 블록 단위로 보여주기 위해 사용한다.
 _BLOCK_TYPES = {"block", "statement_block"}  # Python(들여쓰기)/Java/Javascript 전부 이 이름을 씀
 _MAX_CONTEXT_LINES = 25
+# 감싸는 블록이 없거나(중괄호 없는 화살표 함수 등) 캡처 자체가 매우 좁은 경우에도
+# (예: catch (e) {} 처럼 target이 이미 몇 글자짜리 노드인 경우) 최소한 이만큼은
+# 위아래로 보여준다.
+_MIN_CONTEXT_LINES = 6
 
 
 def _find_enclosing_block(node):
@@ -117,24 +121,30 @@ def _find_enclosing_block(node):
 
 
 def _extract_context(node, source: bytes) -> tuple[str, int]:
-    """탐지된 노드를 감싸는 블록 단위로 근거를 추출한다. 블록을 찾을 수 없으면(예:
-    모듈 최상위 문장) 노드 자체의 텍스트를 사용한다. 블록이 너무 크면 탐지된 줄
-    주변으로 잘라낸다. (근거 텍스트, 그 첫 줄의 1-indexed 줄 번호)를 반환한다."""
-    block = _find_enclosing_block(node)
-    if block is None:
-        text = source[node.start_byte : node.end_byte].decode("utf-8", errors="replace")
-        return text.strip(), node.start_point[0] + 1
-
-    start_line = block.start_point[0]
-    end_line = block.end_point[0]
+    """탐지된 노드를 감싸는 블록 단위로 근거를 추출한다. 블록이 있으면 그 범위를
+    쓰되, 매칭 지점 기준 최소 컨텍스트 줄 수(_MIN_CONTEXT_LINES)보다 좁으면 확장하고,
+    최대치(_MAX_CONTEXT_LINES)보다 크면 매칭 지점 주변으로 잘라낸다. 블록 자체가
+    없는 경우(중괄호 없는 화살표 함수, 모듈 최상위 문장 등)에도 최소 컨텍스트만큼은
+    줄 단위로 보여준다. (근거 텍스트, 그 첫 줄의 1-indexed 줄 번호)를 반환한다."""
+    lines = source.decode("utf-8", errors="replace").splitlines()
     node_line = node.start_point[0]
+
+    block = _find_enclosing_block(node)
+    if block is not None:
+        start_line = block.start_point[0]
+        end_line = block.end_point[0]
+    else:
+        start_line = end_line = node_line
+
+    half_min = _MIN_CONTEXT_LINES // 2
+    start_line = min(start_line, max(0, node_line - half_min))
+    end_line = max(end_line, min(len(lines) - 1, node_line + half_min))
 
     if end_line - start_line + 1 > _MAX_CONTEXT_LINES:
         half = _MAX_CONTEXT_LINES // 2
         start_line = max(start_line, node_line - half)
         end_line = min(end_line, node_line + half)
 
-    lines = source.decode("utf-8", errors="replace").splitlines()
     snippet = "\n".join(lines[start_line : end_line + 1])
     return snippet.strip("\n"), start_line + 1
 
