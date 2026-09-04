@@ -144,10 +144,43 @@ def _collect_identifier_names(node) -> set[str]:
     return names
 
 
+# Spring MVC 등에서 파라미터를 요청값으로 바인딩하는 대표적 어노테이션
+_REQUEST_PARAM_ANNOTATIONS = {
+    "RequestParam", "PathVariable", "RequestBody", "ModelAttribute", "CookieValue", "RequestHeader",
+}
+
+
+def _is_annotated_request_param(scope_node, name: str) -> bool:
+    """scope_node(Java 메서드)의 파라미터 중 name과 이름이 같고 @RequestParam 등
+    요청 바인딩 어노테이션이 붙은 것이 있는지 확인한다."""
+    if scope_node is None or scope_node.type != "method_declaration":
+        return False
+    params = scope_node.child_by_field_name("parameters")
+    if params is None:
+        return False
+    for param in params.children:
+        if param.type != "formal_parameter":
+            continue
+        pname = param.child_by_field_name("name")
+        if pname is None or pname.text.decode("utf-8", errors="replace") != name:
+            continue
+        modifiers = next((c for c in param.children if c.type == "modifiers"), None)
+        if modifiers is None:
+            continue
+        for mod in modifiers.children:
+            if mod.type not in ("annotation", "marker_annotation"):
+                continue
+            ann_name = mod.child_by_field_name("name")
+            if ann_name is not None and ann_name.text.decode("utf-8", errors="replace") in _REQUEST_PARAM_ANNOTATIONS:
+                return True
+    return False
+
+
 def _is_tainted(node, names: set[str], _depth: int = 0, _resolving: set[str] | None = None) -> bool:
     """node 서브트리가 taint source를 직접 포함하거나, 같은 함수 스코프 내에서
     taint source로부터 대입된 지역 변수를 거쳐 오염되는 경우까지 탐지한다
-    (최대 3단계 변수 대입 추적)."""
+    (최대 3단계 변수 대입 추적). Java의 경우 @RequestParam 등으로 요청값이
+    바인딩된 메서드 파라미터도 taint source로 취급한다."""
     if _contains_identifier(node, names):
         return True
     if _depth >= 3:
@@ -157,6 +190,8 @@ def _is_tainted(node, names: set[str], _depth: int = 0, _resolving: set[str] | N
     for ident in _collect_identifier_names(node):
         if ident in names or ident in resolving:
             continue
+        if _is_annotated_request_param(scope, ident):
+            return True
         resolved = _last_assigned_value(scope, ident)
         if resolved is None:
             continue

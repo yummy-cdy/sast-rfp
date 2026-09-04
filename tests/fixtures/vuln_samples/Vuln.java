@@ -3,6 +3,8 @@ import java.util.Random;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import javax.script.ScriptEngine;
+import org.springframework.web.bind.annotation.RequestParam;
 
 class Vuln {
     String password = "hunter2";
@@ -147,5 +149,9 @@ class Vuln {
 
     void hashWithoutSalt(String password) throws Exception {
         MessageDigest.getInstance("SHA-256").digest(password.getBytes());
+    }
+
+    String codeInjectionSpring(ScriptEngine engine, @RequestParam("src") String src) throws Exception {
+        return (String) engine.eval(src);
     }
 }

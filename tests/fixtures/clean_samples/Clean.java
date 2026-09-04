@@ -2,6 +2,7 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.io.FileInputStream;
 import java.net.URL;
+import javax.script.ScriptEngine;
 
 class Clean {
     static final int MAX_RETRY = 5;
@@ -144,5 +145,9 @@ class Clean {
 
     void hashWithSaltSafe(String password, String salt) throws Exception {
         MessageDigest.getInstance("SHA-256").digest((password + salt).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    }
+
+    String codeInjectionSafe(ScriptEngine engine, String fixedScript) throws Exception {
+        return (String) engine.eval(fixedScript);
     }
 }
