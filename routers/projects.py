@@ -1,3 +1,5 @@
+import os
+import shutil
 from datetime import datetime
 from typing import Literal, Optional
 
@@ -112,6 +114,49 @@ def update_project(
     db.commit()
     db.refresh(project)
     return project
+
+
+# SFR-004: 시스템 관리자는 프로젝트를 삭제할 수 있어야 한다.
+@router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_project(
+    project_id: int,
+    db: Session = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    project = db.query(models.Project).filter(models.Project.project_id == project_id).first()
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="프로젝트를 찾을 수 없습니다.")
+
+    execution_ids = [
+        row.execution_id
+        for row in db.query(models.AnalysisExecution.execution_id)
+        .filter(models.AnalysisExecution.project_id == project_id)
+        .all()
+    ]
+    if execution_ids:
+        db.query(models.DiagnosticResult).filter(
+            models.DiagnosticResult.execution_id.in_(execution_ids)
+        ).delete(synchronize_session=False)
+    db.query(models.AnalysisExecution).filter(
+        models.AnalysisExecution.project_id == project_id
+    ).delete(synchronize_session=False)
+    db.query(models.ProjectPermission).filter(
+        models.ProjectPermission.project_id == project_id
+    ).delete(synchronize_session=False)
+
+    source_path = project.source_path
+    db.delete(project)
+    db.commit()
+
+    if source_path and os.path.isdir(source_path):
+        try:
+            shutil.rmtree(source_path)
+        except OSError:
+            # 동기화 클라이언트(OneDrive 등)의 파일 잠금 등으로 삭제가 실패해도
+            # DB 상 프로젝트 삭제는 이미 완료된 상태이므로 그대로 둔다.
+            pass
+
+    return None
 
 
 # SFR-005/DAR-004: 프로젝트별 사용자 접근 권한 부여/해제/조회 (관리자 전용, SEC-003)
